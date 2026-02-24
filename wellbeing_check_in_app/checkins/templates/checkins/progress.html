@@ -1,0 +1,17 @@
+{% load static %}
+
+<h1>Progress</h1>
+
+<form id="progress-form">
+  <label for="from-date">From</label>
+  <input id="from-date" name="from" type="date" />
+
+  <label for="to-date">To</label>
+  <input id="to-date" name="to" type="date" />
+
+  <button type="submit">Calculate</button>
+</form>
+
+<section aria-live="polite" id="progress-result" style="margin-top: 1rem;"></section>
+
+<script src="{% static 'checkins/js/progress.js' %}"></script>
