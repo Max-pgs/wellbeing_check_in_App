@@ -53,6 +53,10 @@ def checkin_delete(request, pk):
     return render(request, "checkins/checkin_confirm_delete.html", {"checkin": checkin})
 
 @login_required
+def progress_view(request):
+    return render(request, "checkins/progress.html")
+
+@login_required
 def api_progress(request):
     """
     Returns averages for the current user over a date range.
