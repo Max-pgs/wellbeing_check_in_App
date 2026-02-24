@@ -52,6 +52,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'wellbeing_check_in_app.urls'
 
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/checkins/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
