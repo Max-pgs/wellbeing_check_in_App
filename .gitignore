@@ -1,0 +1,57 @@
+# ---------------------------
+# Python
+# ---------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---------------------------
+# Virtual environments
+# ---------------------------
+venv/
+env/
+.venv/
+
+# ---------------------------
+# Environment variables
+# ---------------------------
+.env
+.env.*
+
+# ---------------------------
+# Django
+# ---------------------------
+db.sqlite3
+*.log
+media/
+staticfiles/
+
+# Migrations cache
+*/migrations/__pycache__/
+
+# ---------------------------
+# IDE
+# ---------------------------
+.vscode/
+.idea/
+*.iml
+
+# ---------------------------
+# OS (Windows / macOS)
+# ---------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# ---------------------------
+# Testing / coverage
+# ---------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---------------------------
+# Misc
+# ---------------------------
+~$*.docx
