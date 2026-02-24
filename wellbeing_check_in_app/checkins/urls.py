@@ -1,8 +1,10 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
+app_name = "checkins"
+
 urlpatterns = [
-    path("checkins/", views.checkin_list, name="checkin_list"),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("checkins/new/", views.checkin_create, name="checkin_create"),
+    path("", views.checkin_list, name="checkin_list"),
+    path("new/", views.checkin_create, name="checkin_create"),
+    path("<int:pk>/edit/", views.checkin_update, name="checkin_update"),
 ]

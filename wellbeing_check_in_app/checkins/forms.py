@@ -12,3 +12,6 @@ class CheckInForm(forms.ModelForm):
             "activity_score",
             "notes",
         ]
+        widgets = {
+            "checkin_date": forms.DateInput(attrs={"type": "date"}),
+        }

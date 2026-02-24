@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import CheckIn
 from .forms import CheckInForm
 
@@ -18,8 +18,22 @@ def checkin_create(request):
             checkin = form.save(commit=False)
             checkin.user = request.user
             checkin.save()
-            return redirect("checkin_list")
+            return redirect("checkins:checkin_list")
     else:
         form = CheckInForm()
 
     return render(request, "checkins/checkin_form.html", {"form": form})
+
+@login_required
+def checkin_update(request, pk):
+    checkin = get_object_or_404(CheckIn, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = CheckInForm(request.POST, instance=checkin)
+        if form.is_valid():
+            form.save()
+            return redirect("checkins:checkin_list")
+    else:
+        form = CheckInForm(instance=checkin)
+
+    return render(request, "checkins/checkin_form.html", {"form": form, "is_update": True})
