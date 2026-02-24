@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count
@@ -109,3 +108,51 @@ def api_progress(request):
         },
     }
     return JsonResponse(payload)
+
+@login_required
+def api_checkins(request):
+    """
+    Returns check-ins for the current user over a date range.
+    Query params:
+      - from: YYYY-MM-DD (optional)
+      - to:   YYYY-MM-DD (optional)
+    Defaults to last 30 days inclusive.
+    """
+    qs = CheckIn.objects.filter(user=request.user)
+
+    today = date.today()
+    default_from = today - timedelta(days=29)
+    default_to = today
+
+    from_str = request.GET.get("from")
+    to_str = request.GET.get("to")
+
+    try:
+        date_from = date.fromisoformat(from_str) if from_str else default_from
+        date_to = date.fromisoformat(to_str) if to_str else default_to
+    except ValueError:
+        return JsonResponse(
+            {"error": "Invalid date format. Use YYYY-MM-DD for 'from' and 'to'."},
+            status=400,
+        )
+
+    if date_from > date_to:
+        date_from, date_to = date_to, date_from
+
+    qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to)
+
+    data = [
+        {
+            "id": c.id,
+            "checkin_date": c.checkin_date.isoformat(),
+            "energy_score": c.energy_score,
+            "mood_score": c.mood_score,
+            "activity_score": c.activity_score,
+            "notes": c.notes,
+        }
+        for c in qs
+    ]
+
+    return JsonResponse(
+        {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
+    )

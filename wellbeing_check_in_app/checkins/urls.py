@@ -10,4 +10,5 @@ urlpatterns = [
     path("<int:pk>/delete/", views.checkin_delete, name="checkin_delete"),
     path("api/progress/", views.api_progress, name="api_progress"),
     path("progress/", views.progress_view, name="progress"),
+    path("api/checkins/", views.api_checkins, name="api_checkins"),
 ]
