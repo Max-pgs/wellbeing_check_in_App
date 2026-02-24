@@ -1,19 +1,24 @@
-<h1>My Check-ins</h1>
+{% extends "checkins/base.html" %}
 
-<a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
+{% block title %}
+  My Check-ins
+{% endblock %}
 
-<ul>
-  {% for c in checkins %}
-    <li>
-      {{ c.checkin_date }} —
-      Energy: {{ c.energy_score }},
-      Mood: {{ c.mood_score }},
-      Activity: {{ c.activity_score }}
-      - <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
-      - <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
-      - <a href="{% url 'checkins:checkin_delete' c.pk %}">Delete</a>
-    </li>
-  {% empty %}
-    <li>No check-ins yet.</li>
-  {% endfor %}
-</ul>
+{% block content %}
+  <h1>My Check-ins</h1>
+
+  <ul>
+    {% for c in checkins %}
+      <li>
+        {{ c.checkin_date }} -
+        Energy: {{ c.energy_score }},
+        Mood: {{ c.mood_score }},
+        Activity: {{ c.activity_score }}
+        - <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
+        - <a href="{% url 'checkins:checkin_delete' c.pk %}">Delete</a>
+      </li>
+    {% empty %}
+      <li>No check-ins yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,17 +1,26 @@
+{% extends "checkins/base.html" %}
 {% load static %}
 
-<h1>Progress</h1>
+{% block title %}
+  Progress
+  {% endblock %}
 
-<form id="progress-form">
-  <label for="from-date">From</label>
-  <input id="from-date" name="from" type="date" />
+{% block content %}
+  <h1>Progress</h1>
 
-  <label for="to-date">To</label>
-  <input id="to-date" name="to" type="date" />
+  <form id="progress-form">
+    <label for="from-date">From</label>
+    <input id="from-date" name="from" type="date" />
 
-  <button type="submit">Calculate</button>
-</form>
+    <label for="to-date">To</label>
+    <input id="to-date" name="to" type="date" />
 
-<section aria-live="polite" id="progress-result" style="margin-top: 1rem;"></section>
+    <button type="submit">Calculate</button>
+  </form>
 
-<script src="{% static 'checkins/js/progress.js' %}"></script>
+  <section aria-live="polite" id="progress-result" style="margin-top: 1rem;"></section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'checkins/js/progress.js' %}"></script>
+{% endblock %}
