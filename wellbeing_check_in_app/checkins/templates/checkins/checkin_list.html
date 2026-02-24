@@ -1,6 +1,6 @@
 <h1>My Check-ins</h1>
 
-<a href="{% url 'checkin_create' %}">New Check-in</a>
+<a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
 
 <ul>
   {% for c in checkins %}
@@ -9,6 +9,7 @@
       Energy: {{ c.energy_score }},
       Mood: {{ c.mood_score }},
       Activity: {{ c.activity_score }}
+      — <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
     </li>
   {% empty %}
     <li>No check-ins yet.</li>
