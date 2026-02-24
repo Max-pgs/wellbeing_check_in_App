@@ -1,7 +1,15 @@
-<h1>New Check-in</h1>
+{% extends "checkins/base.html" %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
+{% block title %}
+  New Check-in
+{% endblock %}
+
+{% block content %}
+  <h1>New Check-in</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+{% endblock %}

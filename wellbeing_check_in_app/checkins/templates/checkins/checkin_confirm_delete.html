@@ -1,14 +1,18 @@
-<h1>Delete Check-in</h1>
+{% extends "checkins/base.html" %}
 
-<p>
-  Are you sure you want to delete the check-in from {{ checkin.checkin_date }}?
-</p>
+{% block title %}
+  Delete Check-in
+{% endblock %}
 
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">Yes, delete</button>
-</form>
+{% block content %}
+  <h1>Delete Check-in</h1>
 
-<p>
-  <a href="{% url 'checkins:checkin_list' %}">Cancel</a>
-</p>
+  <p>Are you sure you want to delete the check-in from {{ checkin.checkin_date }}?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+  </form>
+
+  <p><a href="{% url 'checkins:checkin_list' %}">Cancel</a></p>
+{% endblock %}
