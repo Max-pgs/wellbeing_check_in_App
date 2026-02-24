@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import CheckIn
 from .forms import CheckInForm
@@ -37,3 +38,13 @@ def checkin_update(request, pk):
         form = CheckInForm(instance=checkin)
 
     return render(request, "checkins/checkin_form.html", {"form": form, "is_update": True})
+
+@login_required
+def checkin_delete(request, pk):
+    checkin = get_object_or_404(CheckIn, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        checkin.delete()
+        return redirect("checkins:checkin_list")
+
+    return render(request, "checkins/checkin_confirm_delete.html", {"checkin": checkin})

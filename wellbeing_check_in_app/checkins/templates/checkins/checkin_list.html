@@ -9,7 +9,9 @@
       Energy: {{ c.energy_score }},
       Mood: {{ c.mood_score }},
       Activity: {{ c.activity_score }}
-      — <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
+      - <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
+      - <a href="{% url 'checkins:checkin_update' c.pk %}">Edit</a>
+      - <a href="{% url 'checkins:checkin_delete' c.pk %}">Delete</a>
     </li>
   {% empty %}
     <li>No check-ins yet.</li>
