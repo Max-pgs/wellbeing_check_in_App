@@ -156,3 +156,15 @@ def api_checkins(request):
     return JsonResponse(
         {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
     )
+
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = UserCreationForm()
+    return render(request, "registration/register.html",{"form":form})
