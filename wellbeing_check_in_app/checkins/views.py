@@ -2,9 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 from datetime import date, timedelta
-from .models import CheckIn
-from .forms import CheckInForm
+from .models import CheckIn, Goal, Habit
+from .forms import CheckInForm, GoalForm, HabitForm
 
 
 @login_required
@@ -54,6 +56,99 @@ def checkin_delete(request, pk):
 @login_required
 def progress_view(request):
     return render(request, "checkins/progress.html")
+
+@login_required
+def goal_list(request):
+    goals = Goal.objects.filter(user=request.user)
+    return render(request, "checkins/goal_list.html", {"goals": goals})
+
+
+@login_required
+def goal_create(request):
+    if request.method == "POST":
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.user = request.user
+            goal.save()
+            return redirect("checkins:goal_list")
+    else:
+        form = GoalForm()
+
+    return render(request, "checkins/goal_form.html", {"form": form})
+
+
+@login_required
+def goal_update(request, goal_id):
+    goal = get_object_or_404(Goal, goal_id=goal_id, user=request.user)
+
+    if request.method == "POST":
+        form = GoalForm(request.POST, instance=goal)
+        if form.is_valid():
+            form.save()
+            return redirect("checkins:goal_list")
+    else:
+        form = GoalForm(instance=goal)
+
+    return render(request, "checkins/goal_form.html", {"form": form, "goal": goal})
+
+
+@login_required
+def goal_delete(request, goal_id):
+    goal = get_object_or_404(Goal, goal_id=goal_id, user=request.user)
+
+    if request.method == "POST":
+        goal.delete()
+        return redirect("checkins:goal_list")
+
+    return render(request, "checkins/goal_confirm_delete.html", {"goal": goal})
+
+
+@login_required
+def habit_list(request):
+    habits = Habit.objects.filter(user=request.user)
+    return render(request, "checkins/habit_list.html", {"habits": habits})
+
+
+@login_required
+def habit_create(request):
+    if request.method == "POST":
+        form = HabitForm(request.POST)
+        if form.is_valid():
+            habit = form.save(commit=False)
+            habit.user = request.user
+            habit.save()
+            return redirect("checkins:habit_list")
+    else:
+        form = HabitForm()
+
+    return render(request, "checkins/habit_form.html", {"form": form})
+
+
+@login_required
+def habit_update(request, habit_id):
+    habit = get_object_or_404(Habit, habit_id=habit_id, user=request.user)
+
+    if request.method == "POST":
+        form = HabitForm(request.POST, instance=habit)
+        if form.is_valid():
+            form.save()
+            return redirect("checkins:habit_list")
+    else:
+        form = HabitForm(instance=habit)
+
+    return render(request, "checkins/habit_form.html", {"form": form, "habit": habit})
+
+
+@login_required
+def habit_delete(request, habit_id):
+    habit = get_object_or_404(Habit, habit_id=habit_id, user=request.user)
+
+    if request.method == "POST":
+        habit.delete()
+        return redirect("checkins:habit_list")
+
+    return render(request, "checkins/habit_confirm_delete.html", {"habit": habit})
 
 @login_required
 def api_progress(request):
@@ -157,8 +252,6 @@ def api_checkins(request):
         {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
     )
 
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
