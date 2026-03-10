@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CheckIn(models.Model):
     user = models.ForeignKey(
@@ -10,9 +11,15 @@ class CheckIn(models.Model):
 
     checkin_date = models.DateField()
 
-    energy_score = models.PositiveSmallIntegerField()
-    mood_score = models.PositiveSmallIntegerField()
-    activity_score = models.PositiveSmallIntegerField()
+    energy_score = models.PositiveSmallIntegerField(
+    validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
+    mood_score = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
+    activity_score = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(10)]
+    )
 
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
