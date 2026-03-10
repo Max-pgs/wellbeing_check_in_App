@@ -1,0 +1,34 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}Habits{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Habits</h1>
+  <p>Manage your wellbeing habits here.</p>
+
+  <p>
+    <a href="{% url 'checkins:habit_create' %}">Create new habit</a>
+  </p>
+
+  {% if habits %}
+    <div class="habit-list">
+      {% for habit in habits %}
+        <article class="habit-card" data-habit-id="{{ habit.habit_id }}">
+          <h2>{{ habit.title }}</h2>
+          <p><strong>Frequency:</strong> {{ habit.get_frequency_type_display }}</p>
+          <p><strong>Created at:</strong> {{ habit.created_at }}</p>
+          <p><strong>Status:</strong> {% if habit.is_active %}Active{% else %}Inactive{% endif %}</p>
+
+          <div class="habit-card__actions">
+            <a href="{% url 'checkins:habit_update' habit.habit_id %}">Edit</a>
+            <a href="{% url 'checkins:habit_delete' habit.habit_id %}">Delete</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No habits yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

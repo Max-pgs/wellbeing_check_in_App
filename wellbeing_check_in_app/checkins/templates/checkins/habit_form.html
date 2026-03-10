@@ -1,0 +1,21 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}
+  {% if habit %}Edit Habit{% else %}Create Habit{% endif %}
+{% endblock %}
+
+{% block content %}
+<section>
+  <h1>
+    {% if habit %}Edit Habit{% else %}Create Habit{% endif %}
+  </h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+      {% if habit %}Save changes{% else %}Create habit{% endif %}
+    </button>
+  </form>
+</section>
+{% endblock %}
