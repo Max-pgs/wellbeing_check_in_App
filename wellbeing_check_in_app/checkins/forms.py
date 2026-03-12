@@ -12,43 +12,44 @@ class CheckInForm(forms.ModelForm):
             "activity_score",
             "notes",
         ]
+
         widgets = {
             "checkin_date": forms.DateInput(attrs={"type": "date"}),
+
+            "energy_score": forms.NumberInput(
+                attrs={
+                    "type": "range",
+                    "min": 1,
+                    "max": 10,
+                    "value": 5,
+                    "step": 1,
+                }
+            ),
+
+            "mood_score": forms.NumberInput(
+                attrs={
+                    "type": "range",
+                    "min": 1,
+                    "max": 10,
+                    "value": 5,
+                    "step": 1,
+                }
+            ),
+
+            "activity_score": forms.NumberInput(
+                attrs={
+                    "type": "range",
+                    "min": 1,
+                    "max": 10,
+                    "value": 5,
+                    "step": 1,
+                }
+            ),
+
+            "notes": forms.Textarea(
+                attrs={
+                    "rows": 4,
+                    "placeholder": "Add any additional thoughts..."
+                }
+            ),
         }
-        
-class GoalForm(forms.ModelForm):
-    class Meta:
-        model = Goal
-        fields = [
-            "title", 
-            "target_value", 
-            "start_date", 
-            "end_date", 
-            "is_active"
-        ]
-        widgets = {
-            "start_date": forms.DateInput(attrs={"type": "date"}),
-            "end_date": forms.DateInput(attrs={"type": "date"}),
-        }
-        
-    def clean(self):
-        cleaned_data = super().clean()
-        start_date = cleaned_data.get("start_date")
-        end_date = cleaned_data.get("end_date")
-
-        if start_date and end_date and end_date < start_date:
-            raise forms.ValidationError(
-                "End date cannot be earlier than start date."
-            )
-
-        return cleaned_data
-    
-
-
-class HabitForm(forms.ModelForm):
-    class Meta:
-        model = Habit
-        fields = [
-            "title", 
-            "frequency_type", 
-            "is_active"]

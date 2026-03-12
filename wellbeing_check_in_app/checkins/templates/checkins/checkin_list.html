@@ -4,23 +4,41 @@
 {% block title %}My Check-ins{% endblock %}
 
 {% block content %}
-<h1>My Check-ins</h1>
+<section class="list-page">
+  <div class="list-header">
+    <div>
+      <h1 class="page-title">My Check-ins</h1>
+      <p class="page-subtitle">Review your recent wellbeing records.</p>
+    </div>
 
-<table id="history-table" border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Energy</th>
-      <th>Mood</th>
-      <th>Activity</th>
-    </tr>
-  </thead>
-  <tbody id="history-tbody">
-    <tr><td colspan="4">Loading...</td></tr>
-  </tbody>
-</table>
+    <a href="{% url 'checkins:checkin_create' %}" class="btn-primary btn-link">
+      New Check-in
+    </a>
+  </div>
+
+  <div class="table-card">
+    <div class="table-responsive">
+      <table id="history-table" class="history-table">
+        <caption class="visually-hidden">History of wellbeing check-ins</caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Energy</th>
+            <th scope="col">Mood</th>
+            <th scope="col">Activity</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+          <tr>
+            <td colspan="4" class="table-message">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'checkins/js/history.js' %}?v=1"></script>
+<script src="{% static 'checkins/js/history.js' %}?v=2"></script>
 {% endblock %}

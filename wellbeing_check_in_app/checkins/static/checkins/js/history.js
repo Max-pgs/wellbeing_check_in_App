@@ -27,7 +27,7 @@ async function loadHistory() {
     const data = await res.json();
     console.log("API DATA:", data);
 
-   
+    
     let items = data.items || [];
     if (Array.isArray(items) && Array.isArray(items[0])) {
       items = items.flat();
