@@ -1,5 +1,5 @@
 from django import forms
-from .models import CheckIn
+from .models import CheckIn, Goal, Habit
 
 
 class CheckInForm(forms.ModelForm):

@@ -1,0 +1,21 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}
+  {% if goal %}Edit Goal{% else %}Create Goal{% endif %}
+{% endblock %}
+
+{% block content %}
+<section>
+  <h1>
+    {% if goal %}Edit Goal{% else %}Create Goal{% endif %}
+  </h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+      {% if goal %}Save changes{% else %}Create goal{% endif %}
+    </button>
+  </form>
+</section>
+{% endblock %}
