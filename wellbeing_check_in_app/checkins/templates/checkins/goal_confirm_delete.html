@@ -1,0 +1,19 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}Delete Goal{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Delete Goal</h1>
+  <p>Are you sure you want to delete "{{ goal.title }}"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm delete</button>
+  </form>
+
+  <p>
+    <a href="{% url 'checkins:goal_list' %}">Cancel</a>
+  </p>
+</section>
+{% endblock %}

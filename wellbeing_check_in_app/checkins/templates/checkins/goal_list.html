@@ -1,0 +1,37 @@
+{% extends "checkins/base.html" %}
+
+{% block title %}
+Goals
+{% endblock %}
+
+{% block content %}
+<section>
+  <h1>Goals</h1>
+  <p>Manage your wellbeing goals here.</p>
+
+  <p>
+    <a href="{% url 'checkins:goal_create' %}">Create new goal</a>
+  </p>
+
+  {% if goals %}
+    <div class="goal-list">
+      {% for goal in goals %}
+        <article class="goal-card" data-goal-id="{{ goal.goal_id }}">
+          <h2>{{ goal.title }}</h2>
+          <p><strong>Target value:</strong> {{ goal.target_value }}</p>
+          <p><strong>Start date:</strong> {{ goal.start_date }}</p>
+          <p><strong>End date:</strong> {{ goal.end_date }}</p>
+          <p><strong>Status:</strong> {% if goal.is_active %}Active{% else %}Inactive{% endif %}</p>
+
+          <div class="goal-card__actions">
+            <a href="{% url 'checkins:goal_update' goal.goal_id %}">Edit</a>
+            <a href="{% url 'checkins:goal_delete' goal.goal_id %}">Delete</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No goals yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

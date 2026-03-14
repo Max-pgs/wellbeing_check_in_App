@@ -75,4 +75,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     emptyBox.textContent = "Error loading history.";
     slider.disabled = true;
   }
+frontend-ui
 });
+
+main
