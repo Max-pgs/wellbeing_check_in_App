@@ -1,64 +1,78 @@
-console.log("history.js loaded");
+document.addEventListener("DOMContentLoaded", async function () {
+  const slider = document.getElementById("history-slider");
+  const emptyBox = document.getElementById("history-empty");
+  const detailBox = document.getElementById("history-detail");
 
-document.addEventListener("DOMContentLoaded", loadHistory);
+  const detailDateText = document.getElementById("detail-date-text");
+  const detailTimeText = document.getElementById("detail-time-text");
+  const detailEnergy = document.getElementById("detail-energy");
+  const detailMood = document.getElementById("detail-mood");
+  const detailActivity = document.getElementById("detail-activity");
+  const detailNotes = document.getElementById("detail-notes");
+  const timelineDateLabel = document.getElementById("timeline-date-label");
 
-async function loadHistory() {
-  const tbody =
-    document.getElementById("history-tbody") ||
-    document.querySelector("#history-table tbody");
+  let records = [];
 
-  if (!tbody) {
-    console.log("tbody not found");
-    return;
+  function formatDate(value) {
+    if (!value) return "Check-in";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+
+    return date.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "short"
+    });
   }
 
-  tbody.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+  function showRecord(index) {
+    const item = records[index];
+    if (!item) return;
+
+    emptyBox.classList.add("hidden");
+    detailBox.classList.remove("hidden");
+
+    detailDateText.textContent = formatDate(item.checkin_date);
+    detailTimeText.textContent = item.checkin_date || "Check-in record";
+    detailEnergy.textContent = item.energy_score ?? "-";
+    detailMood.textContent = item.mood_score ?? "-";
+    detailActivity.textContent = item.activity_score ?? "-";
+    detailNotes.textContent = item.notes && item.notes.trim() ? item.notes : "No notes.";
+    timelineDateLabel.textContent = item.checkin_date || "Latest";
+  }
 
   try {
-    const res = await fetch("/checkins/api/checkins/", {
-      headers: { Accept: "application/json" },
+    const response = await fetch("/checkins/api/history/", {
+      headers: { Accept: "application/json" }
     });
 
-    if (!res.ok) {
-      tbody.innerHTML = "<tr><td colspan='4'>API error</td></tr>";
+    if (!response.ok) {
+      emptyBox.textContent = "Could not load check-in history.";
+      slider.disabled = true;
       return;
     }
 
-    const data = await res.json();
-    console.log("API DATA:", data);
+    const data = await response.json();
 
-    
-    let items = data.items || [];
-    if (Array.isArray(items) && Array.isArray(items[0])) {
-      items = items.flat();
-    }
-
-    if (!items.length) {
-      tbody.innerHTML = "<tr><td colspan='4'>No check-ins yet</td></tr>";
+    if (!Array.isArray(data) || data.length === 0) {
+      emptyBox.textContent = "No check-ins yet.";
+      slider.disabled = true;
       return;
     }
 
-    tbody.innerHTML = "";
+    records = data;
 
-    items.forEach((item) => {
-      const row = document.createElement("tr");
+    slider.min = 0;
+    slider.max = records.length - 1;
+    slider.value = 0;
 
-      const date = item.checkin_date ?? "";
-      const energy = item.energy_score ?? "";
-      const mood = item.mood_score ?? "";
-      const activity = item.activity_score ?? "";
+    showRecord(0);
 
-      row.innerHTML = `
-        <td>${date}</td>
-        <td>${energy}</td>
-        <td>${mood}</td>
-        <td>${activity}</td>
-      `;
-
-      tbody.appendChild(row);
+    slider.addEventListener("input", function () {
+      showRecord(parseInt(this.value, 10));
     });
-  } catch (err) {
-    console.error(err);
-    tbody.innerHTML = "<tr><td colspan='4'>Failed to load data</td></tr>";
+  } catch (error) {
+    emptyBox.textContent = "Error loading history.";
+    slider.disabled = true;
   }
-}
+});

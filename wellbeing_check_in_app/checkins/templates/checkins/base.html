@@ -4,53 +4,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>
-    {% block title %}
-      Wellbeing Check-ins
-    {% endblock %}
-  </title>
-
-  <link rel="stylesheet" href="{% static 'checkins/css/main.css' %}?v=3">
-  {% block extra_head %}
-  {% endblock %}
+  <title>{% block title %}Wellbeing Check-ins{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'checkins/css/main.css' %}?v=1000">
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <div class="container">
-    <nav class="site-nav">
-      <div class="nav-left">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
         <a class="brand" href="{% url 'checkins:checkin_list' %}">Wellbeing Check-ins</a>
 
-        <div class="nav-links">
+        <nav class="main-nav" aria-label="Main navigation">
           <a href="{% url 'checkins:checkin_list' %}">Check-ins</a>
           <a href="{% url 'checkins:progress' %}">Progress</a>
           <a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
+        </nav>
+
+        <div class="user-nav">
+          {% if user.is_authenticated %}
+            <span class="username">{{ user.username }}</span>
+            <a href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+          {% endif %}
         </div>
       </div>
+    </header>
 
-      <div class="nav-right">
-        {% if user.is_authenticated %}
-          <span class="username">{{ user.username }}</span>
-          <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-          <a href="{% url 'login' %}">Login</a>
-          <a href="{% url 'register' %}">Register</a>
-        {% endif %}
-      </div>
-    </nav>
+    <main id="main-content" class="page-container">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
-    {% if messages %}
-      <div class="messages">
-        {% for message in messages %}
-          <div class="message {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <main id="main-content" class="page-content">
-      {% block content %}
-      {% endblock %}
+      {% block content %}{% endblock %}
     </main>
 
     <footer class="site-footer">
@@ -58,7 +51,6 @@
     </footer>
   </div>
 
-  {% block scripts %}
-  {% endblock %}
+  {% block scripts %}{% endblock %}
 </body>
 </html>
