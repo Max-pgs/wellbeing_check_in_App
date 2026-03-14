@@ -1,44 +1,62 @@
 {% extends "checkins/base.html" %}
-{% load static %}
 
 {% block title %}My Check-ins{% endblock %}
 
 {% block content %}
-<section class="list-page">
-  <div class="list-header">
-    <div>
-      <h1 class="page-title">My Check-ins</h1>
-      <p class="page-subtitle">Review your recent wellbeing records.</p>
-    </div>
-
-    <a href="{% url 'checkins:checkin_create' %}" class="btn-primary btn-link">
-      New Check-in
-    </a>
+<section class="page-section">
+  <div class="page-heading">
+    <h1>My Check-ins</h1>
+    <p>Review your recent wellbeing records.</p>
   </div>
 
-  <div class="table-card">
-    <div class="table-responsive">
-      <table id="history-table" class="history-table">
-        <caption class="visually-hidden">History of wellbeing check-ins</caption>
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Energy</th>
-            <th scope="col">Mood</th>
-            <th scope="col">Activity</th>
-          </tr>
-        </thead>
-        <tbody id="history-tbody">
-          <tr>
-            <td colspan="4" class="table-message">Loading...</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="page-action">
+    <a href="{% url 'checkins:checkin_create' %}" class="btn-primary">New Check-in</a>
+  </div>
+
+  <div class="wireframe-card">
+    <div class="card-body">
+      <h2 class="card-title">History of wellbeing check-ins</h2>
+
+      <div class="table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Energy</th>
+              <th>Mood</th>
+              <th>Activity</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for checkin in checkins %}
+              <tr>
+                <td>{{ checkin.checkin_date }}</td>
+                <td>{{ checkin.energy_score }}</td>
+                <td>{{ checkin.mood_score }}</td>
+                <td>{{ checkin.activity_score }}</td>
+                <td>
+                  {% if checkin.notes %}
+                    {{ checkin.notes }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{% url 'checkins:checkin_update' checkin.pk %}" class="edit-btn">Edit</a>
+                  <a href="{% url 'checkins:checkin_delete' checkin.pk %}" class="delete-btn">Delete</a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6">No check-ins yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'checkins/js/history.js' %}?v=2"></script>
 {% endblock %}
