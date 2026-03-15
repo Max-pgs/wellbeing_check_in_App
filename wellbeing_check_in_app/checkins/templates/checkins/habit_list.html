@@ -32,7 +32,7 @@
                     <h3 class="tracker-item-title">{{ habit.title }}</h3>
                     <div class="tracker-badges">
                       {% if habit.frequency %}
-                        <span class="meta-badge warm-badge">{{ habit.frequency }}</span>
+                        <span class="meta-badge warm-badge">{{ habit.get_frequency_type_display }}</span>
                       {% endif %}
 
                       {% if habit.is_active %}
@@ -64,7 +64,7 @@
                   <div class="tracker-meta-item">
                     <span class="tracker-meta-label">Frequency</span>
                     <span class="tracker-meta-value">
-                      {% if habit.frequency %}{{ habit.frequency }}{% else %}Not set{% endif %}
+                      {% if habit.frequency_type %}{{ habit.get_frequency_type_display }}{% else %}Not set{% endif %}
                     </span>
                   </div>
 
