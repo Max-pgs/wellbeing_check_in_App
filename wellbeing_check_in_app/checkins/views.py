@@ -58,6 +58,10 @@ def progress_view(request):
     return render(request, "checkins/progress.html")
 
 @login_required
+def dashboard(request):
+    return render(request, "checkins/dashboard.html")
+
+@login_required
 def goal_list(request):
     goals = Goal.objects.filter(user=request.user)
     return render(request, "checkins/goal_list.html", {"goals": goals})
@@ -295,3 +299,4 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html",{"form":form})
+

@@ -1,0 +1,68 @@
+{% extends "checkins/base.html" %}
+{% load static %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="dashboard-shell">
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">🏠</div>
+      <div>
+        <h1>Dashboard</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="dashboard-shell">
+    <div class="wireframe-card dashboard-card">
+      <div class="card-body">
+        <div class="dashboard-topbar">
+          <div>
+            <h2 class="dashboard-title">My Dashboard</h2>
+          </div>
+        </div>
+
+        <div class="dashboard-summary-grid">
+          <div class="dashboard-summary-card dashboard-summary-card-primary">
+            <span class="dashboard-summary-label">Current Streak</span>
+            <strong class="dashboard-summary-value" id="dashboard-streak">--</strong>
+            <span class="dashboard-summary-meta">days</span>
+          </div>
+
+          <div class="dashboard-summary-card dashboard-summary-card-warm">
+            <span class="dashboard-summary-label">Weekly Goal</span>
+            <strong class="dashboard-summary-value" id="dashboard-weekly-goal">--/--</strong>
+            <span class="dashboard-summary-meta">completed</span>
+          </div>
+
+          <div class="dashboard-summary-card dashboard-summary-card-muted">
+            <span class="dashboard-summary-label">Total Check-ins</span>
+            <strong class="dashboard-summary-value" id="dashboard-total-checkins">--</strong>
+            <span class="dashboard-summary-meta">records</span>
+          </div>
+        </div>
+
+        <div class="dashboard-recent-card">
+          <h3 class="dashboard-section-title">Recent Activity</h3>
+          <div id="dashboard-recent-activity">
+            <div class="dashboard-empty-state">Loading...</div>
+          </div>
+        </div>
+
+        <div class="dashboard-primary-action">
+          <a href="{% url 'checkins:checkin_create' %}" class="dashboard-primary-btn">+ New Check-in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'checkins/js/dashboard.js' %}?v=2"></script>
+{% endblock %}

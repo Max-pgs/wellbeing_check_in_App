@@ -1,12 +1,13 @@
 <div class="footer-inner">
 
-  <a class="brand" href="{% url 'checkins:checkin_list' %}">
+  <a class="brand" href="{% url 'checkins:dashboard' %}">
     Wellbeing Check-ins
   </a>
 
   <div class="header-actions">
 
     <nav class="main-nav footer-main-nav" aria-label="Footer navigation">
+      <a href="{% url 'checkins:dashboard' %}">Dashboard</a>
       <a href="{% url 'checkins:checkin_list' %}">Check-ins</a>
       <a href="{% url 'checkins:progress' %}">Progress</a>
       <a href="{% url 'checkins:goal_list' %}">Goals</a>

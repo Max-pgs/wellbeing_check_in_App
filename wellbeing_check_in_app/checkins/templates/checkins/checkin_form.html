@@ -11,7 +11,7 @@
       <div class="icon-badge green">+</div>
       <div>
         <h1>{% if is_update %}Edit Check-in{% else %}New Check-in{% endif %}</h1>
-        <p>{% if is_update %}Update your wellbeing entry{% else %}Daily data entry{% endif %}</p>
+        <p>{% if is_update %}Update your wellbeing entry{% else %}Daily data{% endif %}</p>
       </div>
     </div>
 
@@ -148,7 +148,7 @@
             <button type="submit" class="btn-primary">
               {% if is_update %}Update Check-in{% else %}Save Check-in{% endif %}
             </button>
-            <a href="{% url 'checkins:checkin_list' %}" class="btn-secondary">Cancel</a>
+            <a href="{% url 'checkins:dashboard' %}" class="btn-secondary">Cancel</a>
           </div>
         </form>
       </div>
