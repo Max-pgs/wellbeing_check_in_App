@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: wellbeing-check-in-app
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn wellbeing_check_in_app.wsgi:application"
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+
+      - key: DEBUG
+        value: "False"
+
+      - key: ALLOWED_HOSTS
+        value: "wellbeing-check-in-app.onrender.com"
+
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://wellbeing-check-in-app.onrender.com"
