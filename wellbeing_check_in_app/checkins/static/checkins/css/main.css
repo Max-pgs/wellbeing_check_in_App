@@ -1962,4 +1962,8 @@ select:focus-visible {
   .mobile-menu {
     width: min(220px, calc(100vw - 32px));
   }
+
+  .username {
+    display: none;
+  }
 }
