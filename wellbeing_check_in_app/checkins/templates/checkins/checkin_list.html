@@ -15,7 +15,8 @@
     class="wireframe-card"
     id="history-app"
     data-api-url="{% url 'checkins:api_checkins' %}"
-    data-edit-base="/checkins/"
+    data-edit-template="{% url 'checkins:checkin_update' 999999 %}"
+    data-delete-template="{% url 'checkins:checkin_delete' 999999 %}"
   >
     <div class="card-body">
       <h2 class="card-title">Your Check-in History</h2>
@@ -44,8 +45,8 @@
         >
 
         <div class="timeline-nav">
-          <button type="button" id="history-prev" class="timeline-btn">← Previous</button>
-          <button type="button" id="history-next" class="timeline-btn">Next →</button>
+          <button type="button" id="history-prev" class="timeline-btn">← Newer</button>
+          <button type="button" id="history-next" class="timeline-btn">Older →</button>
         </div>
       </div>
 
@@ -69,7 +70,7 @@
             </h3>
             <p class="muted" id="detail-time-text">
               {% if checkins %}
-                {{ checkins.0.checkin_date }}
+                Recorded on {{ checkins.0.checkin_date|date:"M j, Y" }}
               {% else %}
                 Check-in record
               {% endif %}

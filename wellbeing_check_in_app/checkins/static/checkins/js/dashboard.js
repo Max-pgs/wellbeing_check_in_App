@@ -3,8 +3,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   const weeklyGoalEl = document.getElementById("dashboard-weekly-goal");
   const totalCheckinsEl = document.getElementById("dashboard-total-checkins");
   const recentActivityEl = document.getElementById("dashboard-recent-activity");
+  const dashboardApp = document.getElementById("dashboard-app");
 
-  if (!streakEl || !weeklyGoalEl || !totalCheckinsEl || !recentActivityEl) return;
+  if (!streakEl || !weeklyGoalEl || !totalCheckinsEl || !recentActivityEl || !dashboardApp) return;
+
+  const progressUrl = dashboardApp.dataset.progressUrl;
+  const checkinsUrl = dashboardApp.dataset.checkinsUrl;
 
   function formatRelativeLabel(dateString, index) {
     const today = new Date();
@@ -94,10 +98,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   try {
     const [progressResponse, checkinsResponse] = await Promise.all([
-      fetch("/checkins/api/progress/", {
+      fetch(progressUrl, {
         headers: { Accept: "application/json" }
       }),
-      fetch("/checkins/api/checkins/", {
+      fetch(checkinsUrl, {
         headers: { Accept: "application/json" }
       })
     ]);

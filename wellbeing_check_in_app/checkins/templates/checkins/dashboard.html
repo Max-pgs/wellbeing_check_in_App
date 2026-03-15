@@ -7,7 +7,11 @@ Dashboard
 
 {% block content %}
 <section class="page-section">
-  <div class="dashboard-shell">
+  <div
+    class="dashboard-shell"
+    data-progress-url="{% url 'checkins:api_progress' %}"
+    data-checkins-url="{% url 'checkins:api_checkins' %}"
+  >
     <div class="page-heading with-icon">
       <div class="icon-badge warm">🏠</div>
       <div>
@@ -18,7 +22,12 @@ Dashboard
 </section>
 
 <section class="page-section">
-  <div class="dashboard-shell">
+  <div
+    class="dashboard-shell"
+    id="dashboard-app"
+    data-progress-url="{% url 'checkins:api_progress' %}"
+    data-checkins-url="{% url 'checkins:api_checkins' %}"
+  >
     <div class="wireframe-card dashboard-card">
       <div class="card-body">
         <div class="dashboard-topbar">
@@ -41,7 +50,7 @@ Dashboard
           </div>
 
           <div class="dashboard-summary-card dashboard-summary-card-muted">
-            <span class="dashboard-summary-label">Total Check-ins</span>
+            <span class="dashboard-summary-label">Recent Check-ins</span>
             <strong class="dashboard-summary-value" id="dashboard-total-checkins">--</strong>
             <span class="dashboard-summary-meta">records</span>
           </div>

@@ -1,9 +1,9 @@
-console.log("progress.js loaded");
-
 const form = document.getElementById("progress-form");
 const result = document.getElementById("progress-result");
 const summaryStats = document.getElementById("summary-stats");
 const achievementList = document.getElementById("achievement-list");
+const progressApp = document.getElementById("progress-app");
+const progressBaseUrl = progressApp ? progressApp.dataset.progressUrl : "";
 
 let progressChartInstance = null;
 
@@ -169,7 +169,8 @@ async function loadProgress() {
   if (from) params.append("from", from);
   if (to) params.append("to", to);
 
-  const url = `/checkins/api/progress/?${params.toString()}`;
+  const queryString = params.toString();
+  const url = queryString ? `${progressBaseUrl}?${queryString}` : progressBaseUrl;
 
   try {
     btn.disabled = true;

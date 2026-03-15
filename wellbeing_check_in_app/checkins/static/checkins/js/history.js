@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!app || !slider || !emptyBox || !detailBox) return;
 
   const apiUrl = app.dataset.apiUrl;
-  const editBase = app.dataset.editBase || "/checkins/";
+  const editTemplate = app.dataset.editTemplate || "";
+  const deleteTemplate = app.dataset.deleteTemplate || "";
 
   const detailDateText = document.getElementById("detail-date-text");
   const detailTimeText = document.getElementById("detail-time-text");
@@ -51,9 +52,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updateNavButtons() {
     if (prevButton) {
       prevButton.disabled = currentIndex <= 0;
+      prevButton.setAttribute("aria-disabled", String(prevButton.disabled));
     }
     if (nextButton) {
       nextButton.disabled = currentIndex >= records.length - 1;
+      nextButton.setAttribute("aria-disabled", String(nextButton.disabled));
     }
   }
 
@@ -68,7 +71,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     detailBox.classList.remove("hidden");
 
     detailDateText.textContent = formatDateLong(item.checkin_date);
-    detailTimeText.textContent = item.checkin_date || "Check-in record";
+    detailTimeText.textContent = item.checkin_date
+      ? `Recorded on ${formatDateShort(item.checkin_date)}`
+      : "Check-in record";
     detailEnergy.textContent = item.energy_score ?? "-";
     detailMood.textContent = item.mood_score ?? "-";
     detailActivity.textContent = item.activity_score ?? "-";
@@ -76,12 +81,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       item.notes && item.notes.trim() ? item.notes : "No notes.";
     timelineDateLabel.textContent = formatDateShort(item.checkin_date);
 
-    if (detailEditLink) {
-      detailEditLink.href = `${editBase}${item.id}/edit/`;
+    if (detailEditLink && editTemplate) {
+      detailEditLink.href = editTemplate.replace("999999", item.id);
     }
 
-    if (detailDeleteLink) {
-      detailDeleteLink.href = `${editBase}${item.id}/delete/`;
+    if (detailDeleteLink && deleteTemplate) {
+      detailDeleteLink.href = deleteTemplate.replace("999999", item.id);
     }
 
     updateNavButtons();

@@ -34,7 +34,11 @@
           <div class="delete-summary-item">
             <span class="delete-summary-label">Frequency</span>
             <span class="delete-summary-value">
-              {% if habit.frequency %}{{ habit.frequency }}{% else %}Not set{% endif %}
+              {% if habit.frequency_type %}
+                {{ habit.get_frequency_type_display }}
+              {% else %}
+                Not set
+              {% endif %}
             </span>
           </div>
         </div>
