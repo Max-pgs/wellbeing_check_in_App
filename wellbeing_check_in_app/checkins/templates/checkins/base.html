@@ -14,7 +14,13 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="topbar-inner">
-        <a href="{% url 'checkins:dashboard' %}" class="brand">Wellbeing Check-ins</a>
+        <a href="{% url 'checkins:dashboard' %}" class="brand" aria-label="Wellbeing Check-ins home">
+          <img
+            src="{% static 'checkins/images/logo.png' %}"
+            alt="Wellbeing Check-ins logo"
+            class="brand-logo"
+          >
+        </a>
 
         <div class="header-actions">
           <div class="user-nav">

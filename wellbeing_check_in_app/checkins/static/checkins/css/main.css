@@ -182,11 +182,16 @@ select:focus-visible {
 }
 
 .brand {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--green);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  flex-shrink: 0;
+}
+
+.brand-logo {
+  width: 160px;
+  height: 56px;
+  object-fit: contain;
+  background: transparent;
 }
 
 .header-actions {
@@ -1909,6 +1914,11 @@ select:focus-visible {
 }
 
 @media (max-width: 480px) {
+  .brand-logo {
+    width: 120px;
+    height: 44px;
+  }
+
   .app-shell {
     padding: 0 14px 20px;
   }
