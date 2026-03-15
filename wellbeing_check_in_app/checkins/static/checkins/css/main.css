@@ -1586,6 +1586,54 @@ select:focus-visible {
   gap: 16px;
 }
 
+.tracker-form .field-block {
+  margin-bottom: 18px;
+}
+
+.tracker-form .field-block:last-of-type {
+  margin-bottom: 0;
+}
+
+.tracker-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.tracker-form input[type="text"],
+.tracker-form input[type="number"],
+.tracker-form input[type="date"],
+.tracker-form input[type="email"],
+.tracker-form input[type="password"],
+.tracker-form select,
+.tracker-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+}
+
+.tracker-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.tracker-form input:focus,
+.tracker-form select:focus,
+.tracker-form textarea:focus {
+  outline: none;
+  border-color: var(--green-soft);
+  box-shadow: 0 0 0 3px rgba(66, 95, 77, 0.12);
+}
+
+.field-block-checkbox {
+  margin-top: 6px;
+}
+
 .tracker-checkbox-row {
   display: inline-flex;
   align-items: center;
