@@ -1444,33 +1444,171 @@ select:focus-visible {
   padding: 12px 14px;
 }
 
-/* ========== Goals / Habits / Generic Cards ========== */
+/* ========== Goals / Habits Pages ========== */
 
-.card-list {
-  display: grid;
-  gap: 16px;
+.tracker-page-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-.item-card {
+.tracker-card {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.tracker-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tracker-title {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--green);
+}
+
+.tracker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tracker-item-card {
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  padding: 20px;
 }
 
-.item-card h3 {
+.tracker-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.tracker-item-title {
+  margin: 0 0 10px;
+  color: var(--green);
+  font-size: 1.35rem;
+}
+
+.tracker-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.tracker-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.meta-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.warm-badge {
+  background: var(--warm-soft);
+  color: #9c6a3e;
+}
+
+.success-badge {
+  background: #dde9e1;
+  color: var(--green);
+}
+
+.muted-badge {
+  background: #eceae4;
+  color: #6d746e;
+}
+
+.tracker-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tracker-meta-item {
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fbfaf8;
+}
+
+.tracker-meta-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.tracker-meta-value {
+  display: block;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.tracker-empty-state {
+  padding: 34px 24px;
+  border: 1px dashed #cfcac0;
+  border-radius: 18px;
+  background: #fbfaf8;
+  text-align: center;
+}
+
+.tracker-empty-state h3 {
   margin: 0 0 8px;
   color: var(--green);
 }
 
-.item-card p {
-  margin: 0 0 8px;
+.tracker-empty-state p {
+  margin: 0 0 18px;
+  color: var(--muted);
 }
 
-.item-meta {
-  color: var(--muted);
-  font-size: 0.95rem;
+.tracker-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tracker-checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.tracker-checkbox-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--green);
+  flex-shrink: 0;
+}
+
+.tracker-checkbox-row label {
+  margin: 0;
+  font-weight: 700;
+  color: var(--green);
+  cursor: pointer;
 }
 
 /* ========== Utilities ========== */
@@ -1564,7 +1702,7 @@ select:focus-visible {
   }
 
   .page-heading.with-icon {
-    align-items: flex-start;
+    align-items: center;
   }
 
   .page-heading.with-icon .icon-badge {
@@ -1655,7 +1793,21 @@ select:focus-visible {
   .delete-actions .btn-danger {
     width: 100%;
   }
+
+  .tracker-item-header {
+    flex-direction: column;
+  }
+
+  .tracker-actions {
+    align-self: flex-start;
+  }
+
+  .tracker-meta-grid,
+  .tracker-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
+
 
 @media (max-width: 640px) {
   .auth-page-heading {

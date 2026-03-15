@@ -214,15 +214,18 @@ def api_progress(request):
     count = agg["count"] or 0
 
     if count >= 3:
-        achievements.append("3 check-ins completed")
+        achievements.append("3 check-ins in this period. Good start")
     if count >= 7:
-        achievements.append("Perfect week")
+        achievements.append("7 check-ins in this period. Consistent effort")
     if count >= 12:
-        achievements.append("12-day streak")
+        achievements.append("12 check-ins in this period. Great dedication")
+
     if agg["avg_mood"] and agg["avg_mood"] >= 8:
         achievements.append("High mood average")
     if agg["avg_energy"] and agg["avg_energy"] >= 8:
         achievements.append("Strong energy average")
+    if agg["avg_activity"] and agg["avg_activity"] >= 8:
+        achievements.append("High activity average")
 
     payload = {
         "from": date_from.isoformat(),

@@ -5,155 +5,156 @@
 
 {% block content %}
 <section class="page-section">
-  <div class="checkin-page-wrapper">
-
-    <div class="page-heading with-icon">
-      <div class="icon-badge green">+</div>
-      <div>
-        <h1>{% if is_update %}Edit Check-in{% else %}New Check-in{% endif %}</h1>
-        <p>{% if is_update %}Update your wellbeing entry{% else %}Daily data{% endif %}</p>
-      </div>
-    </div>
-
-    <div class="wireframe-card checkin-form-card">
-      <div class="card-body">
-        <h2 class="card-title center">How are you feeling today?</h2>
-        <p class="form-intro">
-          Use the sliders below to record your energy, mood and activity for the day.
-        </p>
-
-        <form method="post" novalidate class="checkin-form">
-          {% csrf_token %}
-
-          {% if form.non_field_errors %}
-            <div class="form-errors">
-              {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
-
-          <div class="field-block field-block-compact">
-            <label for="{{ form.checkin_date.id_for_label }}">{{ form.checkin_date.label }}</label>
-            {{ form.checkin_date }}
-            {% if form.checkin_date.errors %}
-              <div class="field-error">
-                {% for error in form.checkin_date.errors %}
-                  <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-            {% endif %}
+    <div class="checkin-page-wrapper">
+      <div class="goal-page-wrapper">
+        <div class="page-heading with-icon">
+          <div class="icon-badge green">+</div>
+          <div>
+            <h1>{% if is_update %}Edit Check-in{% else %}New Check-in{% endif %}</h1>
+            <p>{% if is_update %}Update your wellbeing entry{% else %}Daily data{% endif %}</p>
           </div>
+        </div>
 
-          <div class="field-block">
-            <div class="slider-header">
-              <label for="{{ form.energy_score.id_for_label }}">Energy Level</label>
-              <span class="slider-pill">
-                <span id="{{ form.energy_score.id_for_label }}-value">
-                  {% if form.energy_score.value %}{{ form.energy_score.value }}{% else %}5{% endif %}
-                </span>/10
-              </span>
-            </div>
-
-            <div class="slider-main">
-              {{ form.energy_score }}
-            </div>
-
-            <div class="slider-scale">
-              <span>Low</span>
-              <span>High</span>
-            </div>
-
-            {% if form.energy_score.errors %}
-              <div class="field-error">
-                {% for error in form.energy_score.errors %}
-                  <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
-
-          <div class="field-block">
-            <div class="slider-header">
-              <label for="{{ form.mood_score.id_for_label }}">Mood</label>
-              <span class="slider-pill warm-pill">
-                <span id="{{ form.mood_score.id_for_label }}-value">
-                  {% if form.mood_score.value %}{{ form.mood_score.value }}{% else %}5{% endif %}
-                </span>/10
-              </span>
-            </div>
-
-            <div class="slider-main">
-              {{ form.mood_score }}
-            </div>
-
-            <div class="slider-scale">
-              <span>Bad</span>
-              <span>Great</span>
-            </div>
-
-            {% if form.mood_score.errors %}
-              <div class="field-error">
-                {% for error in form.mood_score.errors %}
-                  <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
-
-          <div class="field-block">
-            <div class="slider-header">
-              <label for="{{ form.activity_score.id_for_label }}">Activity Level</label>
-              <span class="slider-pill soft-pill">
-                <span id="{{ form.activity_score.id_for_label }}-value">
-                  {% if form.activity_score.value %}{{ form.activity_score.value }}{% else %}5{% endif %}
-                </span>/10
-              </span>
-            </div>
-
-            <div class="slider-main">
-              {{ form.activity_score }}
-            </div>
-
-            <div class="slider-scale">
-              <span>Sedentary</span>
-              <span>Very Active</span>
-            </div>
-
-            {% if form.activity_score.errors %}
-              <div class="field-error">
-                {% for error in form.activity_score.errors %}
-                  <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
-
-          <div class="field-block">
-            <label for="{{ form.notes.id_for_label }}">Notes (Optional)</label>
-            <p class="field-help">
-              Add any reflections about your day, rest, exercise or stress level.
+        <div class="wireframe-card checkin-form-card">
+          <div class="card-body">
+            <h2 class="card-title center">How are you feeling today?</h2>
+            <p class="form-intro">
+              Use the sliders below to record your energy, mood and activity for the day.
             </p>
-            {{ form.notes }}
-            {% if form.notes.errors %}
-              <div class="field-error">
-                {% for error in form.notes.errors %}
-                  <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
 
-          <div class="form-actions">
-            <button type="submit" class="btn-primary">
-              {% if is_update %}Update Check-in{% else %}Save Check-in{% endif %}
-            </button>
-            <a href="{% url 'checkins:dashboard' %}" class="btn-secondary">Cancel</a>
+            <form method="post" novalidate class="checkin-form">
+              {% csrf_token %}
+
+              {% if form.non_field_errors %}
+                <div class="form-errors">
+                  {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="field-block field-block-compact">
+                <label for="{{ form.checkin_date.id_for_label }}">{{ form.checkin_date.label }}</label>
+                {{ form.checkin_date }}
+                {% if form.checkin_date.errors %}
+                  <div class="field-error">
+                    {% for error in form.checkin_date.errors %}
+                      <p>{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="field-block">
+                <div class="slider-header">
+                  <label for="{{ form.energy_score.id_for_label }}">Energy Level</label>
+                  <span class="slider-pill">
+                    <span id="{{ form.energy_score.id_for_label }}-value">
+                      {% if form.energy_score.value %}{{ form.energy_score.value }}{% else %}5{% endif %}
+                    </span>/10
+                  </span>
+                </div>
+
+                <div class="slider-main">
+                  {{ form.energy_score }}
+                </div>
+
+                <div class="slider-scale">
+                  <span>Low</span>
+                  <span>High</span>
+                </div>
+
+                {% if form.energy_score.errors %}
+                  <div class="field-error">
+                    {% for error in form.energy_score.errors %}
+                      <p>{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="field-block">
+                <div class="slider-header">
+                  <label for="{{ form.mood_score.id_for_label }}">Mood</label>
+                  <span class="slider-pill warm-pill">
+                    <span id="{{ form.mood_score.id_for_label }}-value">
+                      {% if form.mood_score.value %}{{ form.mood_score.value }}{% else %}5{% endif %}
+                    </span>/10
+                  </span>
+                </div>
+
+                <div class="slider-main">
+                  {{ form.mood_score }}
+                </div>
+
+                <div class="slider-scale">
+                  <span>Bad</span>
+                  <span>Great</span>
+                </div>
+
+                {% if form.mood_score.errors %}
+                  <div class="field-error">
+                    {% for error in form.mood_score.errors %}
+                      <p>{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="field-block">
+                <div class="slider-header">
+                  <label for="{{ form.activity_score.id_for_label }}">Activity Level</label>
+                  <span class="slider-pill soft-pill">
+                    <span id="{{ form.activity_score.id_for_label }}-value">
+                      {% if form.activity_score.value %}{{ form.activity_score.value }}{% else %}5{% endif %}
+                    </span>/10
+                  </span>
+                </div>
+
+                <div class="slider-main">
+                  {{ form.activity_score }}
+                </div>
+
+                <div class="slider-scale">
+                  <span>Sedentary</span>
+                  <span>Very Active</span>
+                </div>
+
+                {% if form.activity_score.errors %}
+                  <div class="field-error">
+                    {% for error in form.activity_score.errors %}
+                      <p>{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="field-block">
+                <label for="{{ form.notes.id_for_label }}">Notes (Optional)</label>
+                <p class="field-help">
+                  Add any reflections about your day, rest, exercise or stress level.
+                </p>
+                {{ form.notes }}
+                {% if form.notes.errors %}
+                  <div class="field-error">
+                    {% for error in form.notes.errors %}
+                      <p>{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                  {% if is_update %}Update Check-in{% else %}Save Check-in{% endif %}
+                </button>
+                <a href="{% url 'checkins:dashboard' %}" class="btn-secondary">Cancel</a>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
 </section>
 {% endblock %}
 

@@ -1,37 +1,93 @@
 {% extends "checkins/base.html" %}
 
-{% block title %}
-Goals
-{% endblock %}
+{% block title %}Goals{% endblock %}
 
 {% block content %}
-<section>
-  <h1>Goals</h1>
-  <p>Manage your wellbeing goals here.</p>
-
-  <p>
-    <a href="{% url 'checkins:goal_create' %}">Create new goal</a>
-  </p>
-
-  {% if goals %}
-    <div class="goal-list">
-      {% for goal in goals %}
-        <article class="goal-card" data-goal-id="{{ goal.goal_id }}">
-          <h2>{{ goal.title }}</h2>
-          <p><strong>Target value:</strong> {{ goal.target_value }}</p>
-          <p><strong>Start date:</strong> {{ goal.start_date }}</p>
-          <p><strong>End date:</strong> {{ goal.end_date }}</p>
-          <p><strong>Status:</strong> {% if goal.is_active %}Active{% else %}Inactive{% endif %}</p>
-
-          <div class="goal-card__actions">
-            <a href="{% url 'checkins:goal_update' goal.goal_id %}">Edit</a>
-            <a href="{% url 'checkins:goal_delete' goal.goal_id %}">Delete</a>
-          </div>
-        </article>
-      {% endfor %}
+<section class="page-section">
+  <div class="tracker-page-wrapper">
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">🎯</div>
+      <div>
+        <h1>Goals</h1>
+      </div>
     </div>
-  {% else %}
-    <p>No goals yet.</p>
-  {% endif %}
+
+    <div class="wireframe-card tracker-card">
+      <div class="card-body">
+        <div class="tracker-topbar">
+          <div>
+            <h2 class="tracker-title">My Goals</h2>
+            <p class="muted">Create and manage personal wellbeing goals in one place.</p>
+          </div>
+
+          <a href="{% url 'checkins:goal_create' %}" class="btn-primary">+ New Goal</a>
+        </div>
+
+        {% if goals %}
+          <div class="tracker-list">
+            {% for goal in goals %}
+              <article class="tracker-item-card" data-goal-id="{{ goal.goal_id }}">
+                <div class="tracker-item-header">
+                  <div>
+                    <h3 class="tracker-item-title">{{ goal.title }}</h3>
+                    <div class="tracker-badges">
+                      <span class="meta-badge warm-badge">Target: {{ goal.target_value }}</span>
+
+                      {% if goal.is_active %}
+                        <span class="meta-badge success-badge">Active</span>
+                      {% else %}
+                        <span class="meta-badge muted-badge">Inactive</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="tracker-actions">
+                    <a
+                      href="{% url 'checkins:goal_update' goal.goal_id %}"
+                      class="icon-button-link"
+                      aria-label="Edit goal {{ goal.title }}"
+                      title="Edit goal"
+                    >✎</a>
+
+                    <a
+                      href="{% url 'checkins:goal_delete' goal.goal_id %}"
+                      class="icon-button-link danger"
+                      aria-label="Delete goal {{ goal.title }}"
+                      title="Delete goal"
+                    >🗑</a>
+                  </div>
+                </div>
+
+                <div class="tracker-meta-grid">
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">Start date</span>
+                    <span class="tracker-meta-value">{{ goal.start_date|date:"F j, Y" }}</span>
+                  </div>
+
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">End date</span>
+                    <span class="tracker-meta-value">{{ goal.end_date|date:"F j, Y" }}</span>
+                  </div>
+
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">Status</span>
+                    <span class="tracker-meta-value">
+                      {% if goal.is_active %}Currently active{% else %}Not active{% endif %}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="tracker-empty-state">
+            <h3>No goals yet</h3>
+            <p>Create your first wellbeing goal to start tracking progress.</p>
+            <a href="{% url 'checkins:goal_create' %}" class="btn-primary">Create Goal</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}
