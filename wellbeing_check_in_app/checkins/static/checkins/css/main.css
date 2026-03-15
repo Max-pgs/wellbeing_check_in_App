@@ -378,7 +378,6 @@ select:focus-visible {
 }
 
 .page-action .btn-primary {
-  display: inline-block;
   text-decoration: none;
 }
 
@@ -607,7 +606,7 @@ select:focus-visible {
   display: flex;
   align-items: flex-start;
   gap: 22px;
-  max-width: 620px;
+  max-width: 760px;
   margin: 0 auto 28px;
 }
 
@@ -640,6 +639,10 @@ select:focus-visible {
   margin: 0 auto;
 }
 
+.auth-card-wide {
+  max-width: 760px;
+}
+
 .auth-card-header {
   display: flex;
   flex-direction: column;
@@ -666,6 +669,21 @@ select:focus-visible {
   gap: 22px;
 }
 
+.auth-form-compact {
+  gap: 18px;
+}
+
+.checkin-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkin-field-block label {
+  font-weight: 700;
+  color: var(--text);
+}
+
 .auth-form .checkin-field-block input {
   width: 100%;
   border: 1px solid var(--border);
@@ -674,6 +692,37 @@ select:focus-visible {
   font: inherit;
   background: var(--surface-2);
   color: var(--text);
+}
+
+.auth-help-text {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.auth-help-text ul {
+  margin: 8px 0 0 18px;
+  padding: 0;
+}
+
+.auth-help-text li {
+  margin: 4px 0;
+}
+
+.auth-help-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.auth-card-wide .card-body {
+  padding-top: 34px;
+}
+
+.auth-card-wide .checkin-field-block input {
+  width: 100%;
 }
 
 .auth-form-actions {
@@ -699,24 +748,6 @@ select:focus-visible {
 
 .auth-footer-text a:hover {
   text-decoration: underline;
-}
-
-@media (max-width: 640px) {
-  .auth-page-heading {
-    gap: 16px;
-    margin-bottom: 22px;
-  }
-
-  .auth-page-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-  }
-
-  .auth-avatar {
-    width: 88px;
-    height: 88px;
-  }
 }
 
 /* ========== Check-in History Page ========== */
@@ -1366,6 +1397,28 @@ select:focus-visible {
     justify-content: flex-start;
   }
 
+  .auth-card-wide {
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .auth-page-heading {
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .auth-page-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+
+  .auth-avatar {
+    width: 88px;
+    height: 88px;
+  }
 }
 
 @media (max-width: 560px) {
