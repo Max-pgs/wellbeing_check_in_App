@@ -24,6 +24,33 @@
   --error-text: #842029;
 }
 
+/* ========== Forms ========== */
+
+input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.2;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ========== Form Layout Helpers ========== */
+.field-block,
+.field-inline,
+.tracker-form-grid > * {
+  min-width: 0;
+}
+
 /* ========== Global Layout ========== */
 
 html {
@@ -603,13 +630,7 @@ select:focus-visible {
 }
 
 .field-inline input[type="date"] {
-  min-width: 180px;
-  width: 100%;
-  padding: 12px 14px;
   border: 2px solid #cfd3cc;
-  border-radius: 12px;
-  background: #fff;
-  color: var(--text);
 }
 
 .slider-row {
@@ -1977,3 +1998,4 @@ select:focus-visible {
     display: none;
   }
 }
+
