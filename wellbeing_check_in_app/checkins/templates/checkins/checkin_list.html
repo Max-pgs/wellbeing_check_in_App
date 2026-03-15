@@ -70,7 +70,7 @@
             </h3>
             <p class="muted" id="detail-time-text">
               {% if checkins %}
-                {{ checkins.0.checkin_date }}
+                Recorded on {{ checkins.0.checkin_date|date:"M j, Y" }}
               {% else %}
                 Check-in record
               {% endif %}

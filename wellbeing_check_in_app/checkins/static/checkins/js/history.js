@@ -69,7 +69,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     detailBox.classList.remove("hidden");
 
     detailDateText.textContent = formatDateLong(item.checkin_date);
-    detailTimeText.textContent = item.checkin_date || "Check-in record";
+    detailTimeText.textContent = item.checkin_date
+      ? `Recorded on ${formatDateShort(item.checkin_date)}`
+      : "Check-in record";
     detailEnergy.textContent = item.energy_score ?? "-";
     detailMood.textContent = item.mood_score ?? "-";
     detailActivity.textContent = item.activity_score ?? "-";
