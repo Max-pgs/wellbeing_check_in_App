@@ -65,21 +65,23 @@ class ApiTests(TestCase):
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()
-        self.assertIn("count", data)
-        self.assertIn("averages", data)
-        self.assertIn("energy", data["averages"])
-        self.assertIn("mood", data["averages"])
-        self.assertIn("activity", data["averages"])
+        self.assertIn("from", data)
+        self.assertIn("to", data)
+        self.assertIn("summary", data)
+        self.assertIn("trends", data)
+        self.assertIn("achievements", data)
 
-    def test_progress_invalid_date_returns_400(self):
-       
+        self.assertIn("avg_energy", data["summary"])
+        self.assertIn("avg_mood", data["summary"])
+        self.assertIn("avg_activity", data["summary"])
+        self.assertIn("total_checkins", data["summary"])
+
+    def test_checkins_invalid_date_returns_400(self):
         self.client.login(username="u1", password="pass12345")
 
-        resp = self.client.get("/checkins/api/progress/?from=2026-03-10&to=2026-03-01")
-
-       
+        resp = self.client.get("/checkins/api/checkins/?from=2026-03-10&to=2026-03-01")
         self.assertEqual(resp.status_code, 400)
-
+            
 
 class OwnershipTests(TestCase):
     def setUp(self):

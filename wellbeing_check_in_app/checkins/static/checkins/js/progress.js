@@ -1,76 +1,169 @@
-console.log("✅ progress.js loaded - chart version");
+console.log("progress.js loaded");
+
 const form = document.getElementById("progress-form");
 const result = document.getElementById("progress-result");
+const summaryStats = document.getElementById("summary-stats");
+const achievementList = document.getElementById("achievement-list");
 
-let energyChartInstance = null;
-function render(data) {
-  if (!data || typeof data.count !== "number") {
-    result.innerHTML = "<p>Unexpected response from server.</p>";
-    return;
+let progressChartInstance = null;
+
+function destroyChart() {
+  if (progressChartInstance) {
+    progressChartInstance.destroy();
+    progressChartInstance = null;
   }
+}
 
-  if (data.count === 0) {
-    result.innerHTML = `<p>No check-ins in this date range.</p>`;
-    
-    if (energyChartInstance) {
-      energyChartInstance.destroy();
-      energyChartInstance = null;
-    }
-    return;
-  }
-
-  
-  result.innerHTML = `
-    <div>
-      <p><strong>Range:</strong> ${data.from} → ${data.to}</p>
-      <p><strong>Check-ins:</strong> ${data.count}</p>
-      <ul>
-        <li><strong>Average energy:</strong> ${data.averages.energy}</li>
-        <li><strong>Average mood:</strong> ${data.averages.mood}</li>
-        <li><strong>Average activity:</strong> ${data.averages.activity}</li>
-      </ul>
+function setSummary(summary) {
+  summaryStats.innerHTML = `
+    <div class="summary-item">
+      <span>Average Energy</span>
+      <strong>${summary.avg_energy ?? "--"}</strong>
+    </div>
+    <div class="summary-item">
+      <span>Average Mood</span>
+      <strong>${summary.avg_mood ?? "--"}</strong>
+    </div>
+    <div class="summary-item">
+      <span>Average Activity</span>
+      <strong>${summary.avg_activity ?? "--"}</strong>
+    </div>
+    <div class="summary-item">
+      <span>Total Check-ins</span>
+      <strong>${summary.total_checkins ?? 0}</strong>
     </div>
   `;
+}
 
-  
-  const ctx = document.getElementById("energyChart").getContext("2d");
-  
+function setAchievements(achievements) {
+  if (!achievements || achievements.length === 0) {
+    achievementList.innerHTML = `<li>No achievements yet.</li>`;
+    return;
+  }
 
-  if (energyChartInstance) energyChartInstance.destroy();
+  achievementList.innerHTML = achievements
+    .map((item) => `<li>${item}</li>`)
+    .join("");
+}
 
-  energyChartInstance = new Chart(ctx, {
-    type: "bar",
+function renderChart(trends) {
+  const canvas = document.getElementById("progressChart");
+  const ctx = canvas.getContext("2d");
+
+  destroyChart();
+
+  if (!trends || trends.length === 0) {
+    return;
+  }
+
+  progressChartInstance = new Chart(ctx, {
+    type: "line",
     data: {
-      labels: ["Energy", "Mood", "Activity"],
+      labels: trends.map((item) => {
+        const d = new Date(item.label);
+        return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      }),
       datasets: [
         {
-          label: "Averages",
-          data: [data.averages.energy, data.averages.mood, data.averages.activity],
+          label: "Energy",
+          data: trends.map((item) => item.energy),
+          borderColor: "#425f4d",
+          backgroundColor: "rgba(66, 95, 77, 0.08)",
+          tension: 0.35,
+          fill: false,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        },
+        {
+          label: "Mood",
+          data: trends.map((item) => item.mood),
+          borderColor: "#d3a16f",
+          backgroundColor: "rgba(211, 161, 111, 0.08)",
+          tension: 0.35,
+          fill: false,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        },
+        {
+          label: "Activity",
+          data: trends.map((item) => item.activity),
+          borderColor: "#a5aea2",
+          backgroundColor: "rgba(165, 174, 162, 0.08)",
+          tension: 0.35,
+          fill: false,
+          pointRadius: 4,
+          pointHoverRadius: 6
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true, suggestedMax: 5 } },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          }
+        },
+        y: {
+          beginAtZero: true,
+          min: 0,
+          max: 10,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      },
     },
   });
 }
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
 
+function renderEmpty(data) {
+  result.innerHTML = `
+    <p>No check-ins found for <strong>${data.from}</strong> to <strong>${data.to}</strong>.</p>
+  `;
+  setSummary({
+    avg_energy: "--",
+    avg_mood: "--",
+    avg_activity: "--",
+    total_checkins: 0,
+  });
+  setAchievements([]);
+  destroyChart();
+}
+
+function render(data) {
+  if (!data || !data.summary || !Array.isArray(data.trends)) {
+    result.innerHTML = "<p>Unexpected response from server.</p>";
+    destroyChart();
+    return;
+  }
+
+  if (data.summary.total_checkins === 0) {
+    renderEmpty(data);
+    return;
+  }
+
+  result.innerHTML = `
+    <p>
+      Showing progress for <strong>${data.from}</strong> to <strong>${data.to}</strong>.
+    </p>
+  `;
+
+  setSummary(data.summary);
+  setAchievements(data.achievements || []);
+  renderChart(data.trends);
+}
+
+async function loadProgress() {
   const from = document.getElementById("from-date").value;
   const to = document.getElementById("to-date").value;
+  const btn = document.getElementById("calcBtn");
 
   if (from && to && from > to) {
     result.innerHTML = "<p>From date cannot be after To date.</p>";
     return;
   }
-
-  const btn = document.getElementById("calcBtn");
-  if (btn) btn.disabled = true;
-
-  result.textContent = "Loading...";
 
   const params = new URLSearchParams();
   if (from) params.append("from", from);
@@ -79,18 +172,35 @@ form.addEventListener("submit", async (e) => {
   const url = `/checkins/api/progress/?${params.toString()}`;
 
   try {
-    const res = await fetch(url, { headers: { Accept: "application/json" } });
+    btn.disabled = true;
+    result.textContent = "Loading...";
 
-    if (!res.ok) {
-      result.textContent = `API error: ${res.status}`;
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      result.innerHTML = `<p>${data.error || `API error: ${response.status}`}</p>`;
+      destroyChart();
       return;
     }
 
-    const data = await res.json();
     render(data);
-  } catch (err) {
-    result.textContent = `Error: ${err.message}`;
+  } catch (error) {
+    result.innerHTML = `<p>Error: ${error.message}</p>`;
+    destroyChart();
   } finally {
-    if (btn) btn.disabled = false;
+    btn.disabled = false;
   }
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await loadProgress();
+});
+
+window.addEventListener("DOMContentLoaded", async () => {
+  await loadProgress();
 });
