@@ -5,14 +5,72 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Delete Check-in</h1>
+  <section class="page-section">
+    <div class="delete-confirm-wrapper">
+      <div class="page-heading with-icon">
+        <div class="icon-badge">!</div>
+        <div>
+          <h1>Delete Check-in</h1>
+          <p>Review the selected entry before permanently removing it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p>Are you sure you want to delete the check-in from {{ checkin.checkin_date }}?</p>
+  <section class="page-section">
+    <div class="wireframe-card delete-confirm-card">
+      <div class="card-body">
+        <div class="delete-warning-banner">
+          <h2 class="card-title">Are you sure?</h2>
+          <p class="muted">
+            This will permanently remove the selected check-in and cannot be undone.
+          </p>
+        </div>
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-  </form>
+        <div class="delete-summary-grid">
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Date</span>
+            <span class="delete-summary-value">{{ checkin.checkin_date|date:"F j, Y" }}</span>
+          </div>
 
-  <p><a href="{% url 'checkins:checkin_list' %}">Cancel</a></p>
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Energy</span>
+            <span class="delete-summary-value">{{ checkin.energy_score }}/10</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Mood</span>
+            <span class="delete-summary-value">{{ checkin.mood_score }}/10</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Activity</span>
+            <span class="delete-summary-value">{{ checkin.activity_score }}/10</span>
+          </div>
+        </div>
+
+        <div class="delete-notes-block">
+          <span class="delete-summary-label">Notes</span>
+          <p>
+            {% if checkin.notes %}
+              {{ checkin.notes }}
+            {% else %}
+              No notes.
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="delete-actions">
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Delete Check-in</button>
+          </form>
+
+          <a href="{% url 'checkins:checkin_list' %}" class="btn-secondary">
+            Cancel
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
