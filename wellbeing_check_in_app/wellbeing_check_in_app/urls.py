@@ -14,12 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 from checkins.views import register
+
+def root_redirect(request):
+    if request.user.is_authenticated:
+        return redirect("checkins:dashboard")
+    return redirect("login")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/register/", register, name="register"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("checkins/", include("checkins.urls")),
+    path("", root_redirect, name="home"),
 ]
