@@ -1,7 +1,13 @@
+{% load static %}
+
 <div class="footer-inner">
 
-  <a class="brand" href="{% url 'checkins:dashboard' %}">
-    Wellbeing Check-ins
+  <a href="{% url 'checkins:dashboard' %}" class="brand" aria-label="Wellbeing Check-ins home">
+    <img
+      src="{% static 'checkins/images/logo.png' %}"
+      alt="Wellbeing Check-ins logo"
+      class="brand-logo"
+    >
   </a>
 
   <div class="header-actions">
