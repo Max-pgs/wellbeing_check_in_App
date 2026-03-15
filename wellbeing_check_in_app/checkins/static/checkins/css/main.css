@@ -596,6 +596,129 @@ select:focus-visible {
   background: #f4f3ef;
 }
 
+/* ========== Login / Auth Pages ========== */
+
+.auth-page-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.auth-page-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  max-width: 620px;
+  margin: 0 auto 28px;
+}
+
+.auth-page-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 20px;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.auth-page-heading-text h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.auth-page-heading-text p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.auth-card {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.auth-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-avatar {
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.auth-form .checkin-field-block input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.auth-form-actions {
+  margin-top: 4px;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  min-height: 50px;
+}
+
+.auth-footer-text {
+  margin: 26px 0 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.auth-footer-text a {
+  color: var(--warm);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer-text a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .auth-page-heading {
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .auth-page-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+
+  .auth-avatar {
+    width: 88px;
+    height: 88px;
+  }
+}
+
 /* ========== Check-in History Page ========== */
 
 .timeline-block {

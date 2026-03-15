@@ -1,35 +1,109 @@
 {% extends "checkins/base.html" %}
+{% load static %}
 
-{% block title %}
-  Login
-{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
-  <h1>Login</h1>
+<section class="page-section">
+  <div class="auth-page-wrapper">
 
-{% if form.errors %}
-  <p role="alert">Invalid username or password.</p>
-{% endif %}
-
-  <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-
-      <div>
-          <label for="{{ form.username.id_for_label }}">Username</label>
-          {{ form.username }}
+    <div class="auth-page-heading">
+      <div class="auth-page-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+          <path d="M10 8L6 12L10 16"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <path d="M6 12H16"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"/>
+          <path d="M13 5H17C18.1 5 19 5.9 19 7V17C19 18.1 18.1 19 17 19H13"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"/>
+        </svg>
       </div>
 
-      <div>
-          <label for="{{ form.password.id_for_label }}">Password</label>
-          {{ form.password }}
+      <div class="auth-page-heading-text">
+        <h1>Login</h1>
+        <p>Authentication entry</p>
       </div>
+    </div>
 
-      <input type="hidden" name="next" value="{{ next }}">
+    <div class="wireframe-card auth-card">
+      <div class="card-body">
 
-      <button type="submit">Log in</button>
-  </form>
+        <div class="auth-card-header">
+          <div class="auth-avatar">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4"
+                      stroke="currentColor"
+                      stroke-width="2"/>
+              <path d="M4 20c2-4 6-6 8-6s6 2 8 6"
+                    stroke="currentColor"
+                    stroke-width="2"/>
+            </svg>
+          </div>
 
-  <p>
-      <a href="{% url 'password_reset' %}">Forgot password?</a>
-  </p>
+          <h2 class="card-title center">Welcome Back</h2>
+          <p class="form-intro">Sign in to continue your plan</p>
+        </div>
+
+        <form method="post" class="auth-form" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="form-errors">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="checkin-field-block">
+            <label for="{{ form.username.id_for_label }}">Email</label>
+            {{ form.username }}
+
+            {% if form.username.errors %}
+              <div class="field-error">
+                {% for error in form.username.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="checkin-field-block">
+            <label for="{{ form.password.id_for_label }}">Password</label>
+            {{ form.password }}
+
+            {% if form.password.errors %}
+              <div class="field-error">
+                {% for error in form.password.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="checkin-form-actions auth-form-actions">
+            <button type="submit" class="btn-primary auth-submit-btn">
+              Sign In
+            </button>
+          </div>
+
+        </form>
+
+        <p class="auth-footer-text">
+          Don't have an account?
+          <a href="{% url 'register' %}">Register</a>
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</section>
 {% endblock %}
