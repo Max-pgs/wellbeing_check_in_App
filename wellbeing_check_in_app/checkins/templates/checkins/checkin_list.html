@@ -15,7 +15,8 @@
     class="wireframe-card"
     id="history-app"
     data-api-url="{% url 'checkins:api_checkins' %}"
-    data-edit-base="/checkins/"
+    data-edit-template="{% url 'checkins:checkin_update' 999999 %}"
+    data-delete-template="{% url 'checkins:checkin_delete' 999999 %}"
   >
     <div class="card-body">
       <h2 class="card-title">Your Check-in History</h2>

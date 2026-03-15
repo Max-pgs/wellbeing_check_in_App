@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!app || !slider || !emptyBox || !detailBox) return;
 
   const apiUrl = app.dataset.apiUrl;
-  const editBase = app.dataset.editBase || "/checkins/";
+  const editTemplate = app.dataset.editTemplate || "";
+  const deleteTemplate = app.dataset.deleteTemplate || "";
 
   const detailDateText = document.getElementById("detail-date-text");
   const detailTimeText = document.getElementById("detail-time-text");
@@ -76,12 +77,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       item.notes && item.notes.trim() ? item.notes : "No notes.";
     timelineDateLabel.textContent = formatDateShort(item.checkin_date);
 
-    if (detailEditLink) {
-      detailEditLink.href = `${editBase}${item.id}/edit/`;
+    if (detailEditLink && editTemplate) {
+      detailEditLink.href = editTemplate.replace("999999", item.id);
     }
 
-    if (detailDeleteLink) {
-      detailDeleteLink.href = `${editBase}${item.id}/delete/`;
+    if (detailDeleteLink && deleteTemplate) {
+      detailDeleteLink.href = deleteTemplate.replace("999999", item.id);
     }
 
     updateNavButtons();
