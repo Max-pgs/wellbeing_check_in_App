@@ -19,7 +19,7 @@ class CheckInForm(forms.ModelForm):
             "energy_score": forms.NumberInput(
                 attrs={
                     "type": "range",
-                    "min": 1,
+                    "min": 0,
                     "max": 10,
                     "value": 5,
                     "step": 1,
@@ -29,7 +29,7 @@ class CheckInForm(forms.ModelForm):
             "mood_score": forms.NumberInput(
                 attrs={
                     "type": "range",
-                    "min": 1,
+                    "min": 0,
                     "max": 10,
                     "value": 5,
                     "step": 1,
@@ -39,7 +39,7 @@ class CheckInForm(forms.ModelForm):
             "activity_score": forms.NumberInput(
                 attrs={
                     "type": "range",
-                    "min": 1,
+                    "min": 0,
                     "max": 10,
                     "value": 5,
                     "step": 1,

@@ -9,16 +9,18 @@ class CheckIn(models.Model):
         related_name="checkins",
     )
 
-    checkin_date = models.DateField()
+    checkin_date = models.DateField(
+        verbose_name="Check-in date"
+    )
 
     energy_score = models.PositiveSmallIntegerField(
-    validators=[MinValueValidator(1), MaxValueValidator(10)]
+    validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
     mood_score = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(10)]
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
     activity_score = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(10)]
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
 
     notes = models.TextField(blank=True)
