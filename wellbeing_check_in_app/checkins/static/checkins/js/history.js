@@ -52,9 +52,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updateNavButtons() {
     if (prevButton) {
       prevButton.disabled = currentIndex <= 0;
+      prevButton.setAttribute("aria-disabled", String(prevButton.disabled));
     }
     if (nextButton) {
       nextButton.disabled = currentIndex >= records.length - 1;
+      nextButton.setAttribute("aria-disabled", String(nextButton.disabled));
     }
   }
 

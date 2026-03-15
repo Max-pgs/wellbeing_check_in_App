@@ -28,8 +28,14 @@
               <span class="username">{{ user.username }}</span>
               <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-              <a href="{% url 'login' %}">Login</a>
-              <a href="{% url 'register' %}">Register</a>
+              <a href="{% url 'login' %}"
+                {% if request.resolver_match.url_name == "login" %}aria-current="page"{% endif %}>
+                Login
+              </a>
+              <a href="{% url 'register' %}"
+                {% if request.resolver_match.url_name == "register" %}aria-current="page"{% endif %}>
+                Register
+              </a>
             {% endif %}
           </div>
 
@@ -41,24 +47,60 @@
           </button>
 
           <nav class="main-nav" aria-label="Main navigation">
-            <a href="{% url 'checkins:dashboard' %}">Dashboard</a>
-            <a href="{% url 'checkins:checkin_list' %}">Check-ins</a>
-            <a href="{% url 'checkins:progress' %}">Progress</a>
-            <a href="{% url 'checkins:goal_list' %}">Goals</a>
-            <a href="{% url 'checkins:habit_list' %}">Habits</a>
-            <a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
+            <a href="{% url 'checkins:dashboard' %}"
+              {% if request.resolver_match.url_name == "dashboard" %}aria-current="page"{% endif %}>
+              Dashboard
+            </a>
+            <a href="{% url 'checkins:checkin_list' %}"
+              {% if request.resolver_match.url_name == "checkin_list" %}aria-current="page"{% endif %}>
+              Check-ins
+            </a>
+            <a href="{% url 'checkins:progress' %}"
+              {% if request.resolver_match.url_name == "progress" %}aria-current="page"{% endif %}>
+              Progress
+            </a>
+            <a href="{% url 'checkins:goal_list' %}"
+              {% if request.resolver_match.url_name == "goal_list" %}aria-current="page"{% endif %}>
+              Goals
+            </a>
+            <a href="{% url 'checkins:habit_list' %}"
+              {% if request.resolver_match.url_name == "habit_list" %}aria-current="page"{% endif %}>
+              Habits
+            </a>
+            <a href="{% url 'checkins:checkin_create' %}"
+              {% if request.resolver_match.url_name == "checkin_create" %}aria-current="page"{% endif %}>
+              New Check-in
+            </a>
           </nav>
         </div>
       </div>
 
       <div class="mobile-menu" id="mobileMenu">
         <nav class="mobile-menu-links" aria-label="Mobile navigation">
-          <a href="{% url 'checkins:dashboard' %}">Dashboard</a>
-          <a href="{% url 'checkins:checkin_list' %}">Check-ins</a>
-          <a href="{% url 'checkins:progress' %}">Progress</a>
-          <a href="{% url 'checkins:goal_list' %}">Goals</a>
-          <a href="{% url 'checkins:habit_list' %}">Habits</a>
-          <a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
+          <a href="{% url 'checkins:dashboard' %}"
+            {% if request.resolver_match.url_name == "dashboard" %}aria-current="page"{% endif %}>
+            Dashboard
+          </a>
+          <a href="{% url 'checkins:checkin_list' %}"
+            {% if request.resolver_match.url_name == "checkin_list" %}aria-current="page"{% endif %}>
+            Check-ins
+          </a>
+          <a href="{% url 'checkins:progress' %}"
+            {% if request.resolver_match.url_name == "progress" %}aria-current="page"{% endif %}>
+            Progress
+          </a>
+          <a href="{% url 'checkins:goal_list' %}"
+            {% if request.resolver_match.url_name == "goal_list" %}aria-current="page"{% endif %}>
+            Goals
+          </a>
+          <a href="{% url 'checkins:habit_list' %}"
+            {% if request.resolver_match.url_name == "habit_list" %}aria-current="page"{% endif %}>
+            Habits
+          </a>
+          <a href="{% url 'checkins:checkin_create' %}"
+            {% if request.resolver_match.url_name == "checkin_create" %}aria-current="page"{% endif %}>
+            New Check-in
+          </a>
         </nav>
       </div>
     </header>
@@ -79,8 +121,7 @@
       {% include "checkins/partials/footer_nav.html" %}
     </footer>
   </div>
-
+  <script src="{% static 'checkins/js/base.js' %}"></script>
+  {% block scripts %}{% endblock %}
 </body>
-<script src="{% static 'checkins/js/base.js' %}"></script>
-{% block scripts %}{% endblock %}
 </html>

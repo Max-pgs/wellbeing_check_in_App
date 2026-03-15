@@ -1,5 +1,3 @@
-console.log("progress.js loaded");
-
 const form = document.getElementById("progress-form");
 const result = document.getElementById("progress-result");
 const summaryStats = document.getElementById("summary-stats");
