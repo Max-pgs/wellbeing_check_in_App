@@ -3,17 +3,63 @@
 {% block title %}Delete Habit{% endblock %}
 
 {% block content %}
-<section>
-  <h1>Delete Habit</h1>
-  <p>Are you sure you want to delete "{{ habit.title }}"?</p>
+<section class="page-section">
+  <div class="delete-confirm-wrapper">
+    <div class="page-heading with-icon">
+      <div class="icon-badge">!</div>
+      <div>
+        <h1>Delete Habit</h1>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Confirm delete</button>
-  </form>
+<section class="page-section">
+  <div class="delete-confirm-wrapper">
+    <div class="wireframe-card delete-confirm-card">
+      <div class="card-body">
+        <div class="delete-warning-banner">
+          <h2 class="card-title">Are you sure?</h2>
+          <p class="muted">
+            This will permanently remove the selected habit and cannot be undone.
+          </p>
+        </div>
 
-  <p>
-    <a href="{% url 'checkins:habit_list' %}">Cancel</a>
-  </p>
+        <div class="delete-summary-grid">
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Habit title</span>
+            <span class="delete-summary-value">{{ habit.title }}</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Frequency</span>
+            <span class="delete-summary-value">
+              {% if habit.frequency %}{{ habit.frequency }}{% else %}Not set{% endif %}
+            </span>
+          </div>
+        </div>
+
+        <div class="delete-notes-block">
+          <span class="delete-summary-label">Status</span>
+          <p>
+            {% if habit.is_active %}
+              This habit is currently active.
+            {% else %}
+              This habit is currently inactive.
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="delete-actions">
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Delete Habit</button>
+          </form>
+
+          <a href="{% url 'checkins:habit_list' %}" class="btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}

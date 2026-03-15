@@ -5,17 +5,76 @@
 {% endblock %}
 
 {% block content %}
-<section>
-  <h1>
-    {% if habit %}Edit Habit{% else %}Create Habit{% endif %}
-  </h1>
+<section class="page-section">
+  <div class="checkin-page-wrapper">
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">✓</div>
+      <div>
+        <h1>{% if habit %}Edit Habit{% else %}Create Habit{% endif %}</h1>
+        <p>
+          {% if habit %}
+            Update the details of your wellbeing routine.
+          {% else %}
+            Add a new routine to support your everyday wellbeing.
+          {% endif %}
+        </p>
+      </div>
+    </div>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">
-      {% if habit %}Save changes{% else %}Create habit{% endif %}
-    </button>
-  </form>
+    <div class="wireframe-card checkin-form-card">
+      <div class="card-body">
+        <h2 class="card-title center">
+          {% if habit %}Update Habit{% else %}New Habit{% endif %}
+        </h2>
+        <p class="form-intro">
+          Add the details for your habit and save it to your wellbeing routine.
+        </p>
+
+        <form method="post" novalidate class="checkin-form tracker-form">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="form-errors">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            <div class="field-block {% if field.field.widget.input_type == 'checkbox' %}field-block-checkbox{% endif %}">
+              {% if field.field.widget.input_type == "checkbox" %}
+                <div class="tracker-checkbox-row">
+                  {{ field }}
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                </div>
+              {% else %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if field.help_text %}
+                  <p class="field-help">{{ field.help_text }}</p>
+                {% endif %}
+                {{ field }}
+              {% endif %}
+
+              {% if field.errors %}
+                <div class="field-error">
+                  {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              {% if habit %}Save Changes{% else %}Create Habit{% endif %}
+            </button>
+            <a href="{% url 'checkins:habit_list' %}" class="btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}

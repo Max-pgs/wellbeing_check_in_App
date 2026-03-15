@@ -10,6 +10,7 @@ urlpatterns = [
     path("<int:pk>/delete/", views.checkin_delete, name="checkin_delete"),
     path("api/progress/", views.api_progress, name="api_progress"),
     path("progress/", views.progress_view, name="progress"),
+    path("dashboard/", views.dashboard, name="dashboard"),
     path("api/checkins/", views.api_checkins, name="api_checkins"),
     path("goals/", views.goal_list, name="goal_list"),
     path("goals/new/", views.goal_create, name="goal_create"),

@@ -1,20 +1,135 @@
 {% extends "checkins/base.html" %}
+{% load static %}
 
-{% block title %}
-    Register
-{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-    <h1>Register</h1>
+<section class="page-section">
+  <div class="auth-page-wrapper">
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create account</button>
-    </form>
+    <div class="auth-page-heading">
+      <div class="auth-page-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5V19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M5 12H19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </div>
 
-    <p>
-        Already have an account?
-        <a href="{% url 'login' %}">Login</a>
-    </p>
+      <div class="auth-page-heading-text">
+        <h1>Register</h1>
+      </div>
+    </div>
+
+    <div class="wireframe-card auth-card auth-card-wide">
+      <div class="card-body">
+        <div class="auth-card-header">
+          <div class="auth-avatar">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 20c2-4 6-6 8-6s6 2 8 6" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h2 class="card-title center">Create Account</h2>
+          <p class="form-intro">Register to start tracking your wellbeing plan</p>
+        </div>
+
+        <form method="post" class="auth-form auth-form-compact" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="form-errors">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="checkin-field-block">
+            <label for="{{ form.username.id_for_label }}">Username</label>
+            {{ form.username }}
+
+            {% if form.username.help_text %}
+              <div class="auth-help-text">
+                {{ form.username.help_text|safe }}
+              </div>
+            {% endif %}
+
+            {% if form.username.errors %}
+              <div class="field-error">
+                {% for error in form.username.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          {% if form.email %}
+          <div class="checkin-field-block">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+
+            {% if form.email.errors %}
+              <div class="field-error">
+                {% for error in form.email.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <div class="checkin-field-block">
+            <label for="{{ form.password1.id_for_label }}">Password</label>
+            {{ form.password1 }}
+
+            {% if form.password1.help_text %}
+              <div class="auth-help-text auth-help-list">
+                {{ form.password1.help_text|safe }}
+              </div>
+            {% endif %}
+
+            {% if form.password1.errors %}
+              <div class="field-error">
+                {% for error in form.password1.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="checkin-field-block">
+            <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+            {{ form.password2 }}
+
+            {% if form.password2.help_text %}
+              <div class="auth-help-text">
+                {{ form.password2.help_text|safe }}
+              </div>
+            {% endif %}
+
+            {% if form.password2.errors %}
+              <div class="field-error">
+                {% for error in form.password2.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="checkin-form-actions auth-form-actions">
+            <button type="submit" class="btn-primary auth-submit-btn">
+              Register
+            </button>
+          </div>
+        </form>
+
+        <p class="auth-footer-text">
+          Already have an account?
+          <a href="{% url 'login' %}">Login</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
 {% endblock %}

@@ -1,0 +1,31 @@
+<div class="footer-inner">
+
+  <a class="brand" href="{% url 'checkins:dashboard' %}">
+    Wellbeing Check-ins
+  </a>
+
+  <div class="header-actions">
+
+    <nav class="main-nav footer-main-nav" aria-label="Footer navigation">
+      <a href="{% url 'checkins:dashboard' %}">Dashboard</a>
+      <a href="{% url 'checkins:checkin_list' %}">Check-ins</a>
+      <a href="{% url 'checkins:progress' %}">Progress</a>
+      <a href="{% url 'checkins:goal_list' %}">Goals</a>
+      <a href="{% url 'checkins:habit_list' %}">Habits</a>
+      <a href="{% url 'checkins:checkin_create' %}">New Check-in</a>
+    </nav>
+
+    <div class="user-nav">
+      {% if user.is_authenticated %}
+        <span class="username">{{ user.username }}</span>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+
+<p class="footer-copy">
+  &copy; 2026 Wellbeing Check-ins App
+</p>

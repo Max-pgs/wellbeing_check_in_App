@@ -1,21 +1,127 @@
 {% extends "checkins/base.html" %}
 
 {% block title %}
-  {% if goal %}Edit Goal{% else %}Create Goal{% endif %}
+  {% if form.instance.pk %}Edit Goal{% else %}New Goal{% endif %}
 {% endblock %}
 
 {% block content %}
-<section>
-  <h1>
-    {% if goal %}Edit Goal{% else %}Create Goal{% endif %}
-  </h1>
+<section class="page-section">
+  <div class="tracker-page-wrapper">
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">
-      {% if goal %}Save changes{% else %}Create goal{% endif %}
-    </button>
-  </form>
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">🎯</div>
+      <div>
+        <h1>{% if form.instance.pk %}Edit Goal{% else %}New Goal{% endif %}</h1>
+        <p>
+          {% if form.instance.pk %}
+            Update your wellbeing goal details.
+          {% else %}
+            Create a new wellbeing goal to track your progress.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="wireframe-card tracker-card">
+      <div class="card-body">
+        <h2 class="card-title center">
+          {% if form.instance.pk %}Update Goal{% else %}Set a New Goal{% endif %}
+        </h2>
+
+        <p class="form-intro">
+          Define a clear target and set the time period for your wellbeing goal.
+        </p>
+
+        <form method="post" novalidate class="checkin-form">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="form-errors">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="field-block">
+            <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+              <div class="field-error">
+                {% for error in form.title.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="field-block field-block-compact">
+            <label for="{{ form.target_value.id_for_label }}">{{ form.target_value.label }}</label>
+            {{ form.target_value }}
+            {% if form.target_value.errors %}
+              <div class="field-error">
+                {% for error in form.target_value.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="tracker-form-grid">
+            <div class="field-block">
+              <label for="{{ form.start_date.id_for_label }}">{{ form.start_date.label }}</label>
+              {{ form.start_date }}
+              {% if form.start_date.errors %}
+                <div class="field-error">
+                  {% for error in form.start_date.errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="field-block">
+              <label for="{{ form.end_date.id_for_label }}">{{ form.end_date.label }}</label>
+              {{ form.end_date }}
+              {% if form.end_date.errors %}
+                <div class="field-error">
+                  {% for error in form.end_date.errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+         {% if form.is_active %}
+          <div class="field-block">
+            <div class="tracker-checkbox-row">
+              {{ form.is_active }}
+              <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+            </div>
+
+            <p class="field-help">Keep this enabled while the goal is currently in progress.</p>
+
+            {% if form.is_active.errors %}
+              <div class="field-error">
+                {% for error in form.is_active.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              {% if form.instance.pk %}Update Goal{% else %}Save Goal{% endif %}
+            </button>
+            <a href="{% url 'checkins:goal_list' %}" class="btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
 </section>
 {% endblock %}

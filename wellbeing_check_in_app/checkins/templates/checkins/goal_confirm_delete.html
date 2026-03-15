@@ -1,19 +1,75 @@
 {% extends "checkins/base.html" %}
 
-{% block title %}Delete Goal{% endblock %}
+{% block title %}
+  Delete Goal
+{% endblock %}
 
 {% block content %}
-<section>
-  <h1>Delete Goal</h1>
-  <p>Are you sure you want to delete "{{ goal.title }}"?</p>
+<section class="page-section">
+  <div class="tracker-page-wrapper">
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Confirm delete</button>
-  </form>
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">🎯</div>
+      <div>
+        <h1>Delete Goal</h1>
+      </div>
+    </div>
 
-  <p>
-    <a href="{% url 'checkins:goal_list' %}">Cancel</a>
-  </p>
+    <div class="wireframe-card delete-confirm-card">
+      <div class="card-body">
+        <div class="delete-warning-banner">
+          <h2 class="card-title">Are you sure?</h2>
+          <p class="muted">
+            This action will permanently delete the selected goal and cannot be undone.
+          </p>
+        </div>
+
+        <div class="delete-summary-grid">
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Title</span>
+            <span class="delete-summary-value">{{ goal.title }}</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Target</span>
+            <span class="delete-summary-value">{{ goal.target_value }}</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">Start date</span>
+            <span class="delete-summary-value">{{ goal.start_date|date:"F j, Y" }}</span>
+          </div>
+
+          <div class="delete-summary-item">
+            <span class="delete-summary-label">End date</span>
+            <span class="delete-summary-value">{{ goal.end_date|date:"F j, Y" }}</span>
+          </div>
+        </div>
+
+        <div class="delete-notes-block">
+          <span class="delete-summary-label">Status</span>
+          <p>
+            {% if goal.is_active %}
+              Currently active
+            {% else %}
+              Not active
+            {% endif %}
+          </p>
+        </div>
+
+        <div class="delete-actions">
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Delete Goal</button>
+          </form>
+
+          <a href="{% url 'checkins:goal_list' %}" class="btn-secondary">
+            Cancel
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 {% endblock %}

@@ -58,6 +58,10 @@ def progress_view(request):
     return render(request, "checkins/progress.html")
 
 @login_required
+def dashboard(request):
+    return render(request, "checkins/dashboard.html")
+
+@login_required
 def goal_list(request):
     goals = Goal.objects.filter(user=request.user)
     return render(request, "checkins/goal_list.html", {"goals": goals})
@@ -153,7 +157,7 @@ def habit_delete(request, habit_id):
 @login_required
 def api_progress(request):
     """
-    Returns averages for the current user over a date range.
+    Returns progress analytics for the current user over a date range.
     Query params:
       - from: YYYY-MM-DD (optional)
       - to:   YYYY-MM-DD (optional)
@@ -178,30 +182,64 @@ def api_progress(request):
         )
 
     if date_from > date_to:
-        date_from, date_to = date_to, date_from
+        return JsonResponse(
+            {"error": "'from' date cannot be after 'to' date."},
+            status=400,
+        )
 
-    qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to)
+    filtered_qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to).order_by("checkin_date")
 
-    agg = qs.aggregate(
+    agg = filtered_qs.aggregate(
         count=Count("id"),
         avg_energy=Avg("energy_score"),
         avg_mood=Avg("mood_score"),
         avg_activity=Avg("activity_score"),
     )
 
-    def r1(x):
-        return round(float(x), 1) if x is not None else None
+    def r1(value):
+        return round(float(value), 1) if value is not None else None
+
+    trends = [
+        {
+            "label": checkin.checkin_date.isoformat(),
+            "date": checkin.checkin_date.isoformat(),
+            "energy": checkin.energy_score,
+            "mood": checkin.mood_score,
+            "activity": checkin.activity_score,
+        }
+        for checkin in filtered_qs
+    ]
+
+    achievements = []
+    count = agg["count"] or 0
+
+    if count >= 3:
+        achievements.append("3 check-ins in this period. Good start")
+    if count >= 7:
+        achievements.append("7 check-ins in this period. Consistent effort")
+    if count >= 12:
+        achievements.append("12 check-ins in this period. Great dedication")
+
+    if agg["avg_mood"] and agg["avg_mood"] >= 8:
+        achievements.append("High mood average")
+    if agg["avg_energy"] and agg["avg_energy"] >= 8:
+        achievements.append("Strong energy average")
+    if agg["avg_activity"] and agg["avg_activity"] >= 8:
+        achievements.append("High activity average")
 
     payload = {
         "from": date_from.isoformat(),
         "to": date_to.isoformat(),
-        "count": agg["count"],
-        "averages": {
-            "energy": r1(agg["avg_energy"]),
-            "mood": r1(agg["avg_mood"]),
-            "activity": r1(agg["avg_activity"]),
+        "summary": {
+            "avg_energy": r1(agg["avg_energy"]),
+            "avg_mood": r1(agg["avg_mood"]),
+            "avg_activity": r1(agg["avg_activity"]),
+            "total_checkins": count,
         },
+        "trends": trends,
+        "achievements": achievements,
     }
+
     return JsonResponse(payload)
 
 @login_required
@@ -232,7 +270,10 @@ def api_checkins(request):
         )
 
     if date_from > date_to:
-        date_from, date_to = date_to, date_from
+        return JsonResponse(
+            {"error": "'from' date cannot be after 'to' date."},
+            status=400,
+        )
 
     qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to)
 
@@ -261,3 +302,4 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html",{"form":form})
+

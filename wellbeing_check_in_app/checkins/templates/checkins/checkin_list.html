@@ -1,62 +1,145 @@
 {% extends "checkins/base.html" %}
 
-{% block title %}My Check-ins{% endblock %}
+{% block title %}Check-ins{% endblock %}
 
 {% block content %}
 <section class="page-section">
-  <div class="page-heading">
-    <h1>My Check-ins</h1>
-    <p>Review your recent wellbeing records.</p>
+  <div class="page-heading with-icon">
+    <div class="icon-badge warm">☰</div>
+    <div>
+      <h1>Check-ins</h1>
+    </div>
   </div>
 
-  <div class="page-action">
-    <a href="{% url 'checkins:checkin_create' %}" class="btn-primary">New Check-in</a>
-  </div>
-
-  <div class="wireframe-card">
+  <div
+    class="wireframe-card"
+    id="history-app"
+    data-api-url="{% url 'checkins:api_checkins' %}"
+    data-edit-base="/checkins/"
+  >
     <div class="card-body">
-      <h2 class="card-title">History of wellbeing check-ins</h2>
+      <h2 class="card-title">Your Check-in History</h2>
 
-      <div class="table-wrap">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Energy</th>
-              <th>Mood</th>
-              <th>Activity</th>
-              <th>Notes</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for checkin in checkins %}
-              <tr>
-                <td>{{ checkin.checkin_date }}</td>
-                <td>{{ checkin.energy_score }}</td>
-                <td>{{ checkin.mood_score }}</td>
-                <td>{{ checkin.activity_score }}</td>
-                <td>
-                  {% if checkin.notes %}
-                    {{ checkin.notes }}
-                  {% else %}
-                    -
-                  {% endif %}
-                </td>
-                <td>
-                  <a href="{% url 'checkins:checkin_update' checkin.pk %}" class="edit-btn">Edit</a>
-                  <a href="{% url 'checkins:checkin_delete' checkin.pk %}" class="delete-btn">Delete</a>
-                </td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="6">No check-ins yet.</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="timeline-block">
+        <div class="timeline-header">
+          <div class="timeline-label">Slider Timeline</div>
+          <div class="timeline-date" id="timeline-date-label">
+            {% if checkins %}
+              {{ checkins.0.checkin_date|date:"M j, Y" }}
+            {% else %}
+              No records
+            {% endif %}
+          </div>
+        </div>
+
+        <input
+          type="range"
+          id="history-slider"
+          class="history-slider"
+          min="0"
+          max="0"
+          value="0"
+          {% if not checkins %}disabled{% endif %}
+          aria-label="Browse check-in history"
+        >
+
+        <div class="timeline-nav">
+          <button type="button" id="history-prev" class="timeline-btn">← Previous</button>
+          <button type="button" id="history-next" class="timeline-btn">Next →</button>
+        </div>
+      </div>
+
+      <div id="history-empty" class="history-empty {% if checkins %}hidden{% endif %}">
+        No check-ins yet. Create your first wellbeing record.
+      </div>
+
+      <article
+        id="history-detail"
+        class="history-detail-card {% if not checkins %}hidden{% endif %}"
+        aria-live="polite"
+      >
+        <div class="history-topline">
+          <div>
+            <h3 id="detail-date-text">
+              {% if checkins %}
+                {{ checkins.0.checkin_date|date:"l, M j" }}
+              {% else %}
+                Check-in
+              {% endif %}
+            </h3>
+            <p class="muted" id="detail-time-text">
+              {% if checkins %}
+                {{ checkins.0.checkin_date }}
+              {% else %}
+                Check-in record
+              {% endif %}
+            </p>
+          </div>
+
+          <div class="history-actions">
+            {% if checkins %}
+              <a
+                id="detail-edit-link"
+                href="{% url 'checkins:checkin_update' checkins.0.pk %}"
+                class="icon-button-link"
+                aria-label="Edit check-in"
+              >✎</a>
+              <a
+                id="detail-delete-link"
+                href="{% url 'checkins:checkin_delete' checkins.0.pk %}"
+                class="icon-button-link danger"
+                aria-label="Delete check-in"
+              >🗑</a>
+            {% else %}
+              <span class="icon-button-link disabled" aria-hidden="true">✎</span>
+              <span class="icon-button-link danger disabled" aria-hidden="true">🗑</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span>Energy</span>
+            <strong id="detail-energy">
+              {% if checkins %}{{ checkins.0.energy_score }}{% else %}-{% endif %}
+            </strong>
+          </div>
+
+          <div class="metric-card warm-bg">
+            <span>Mood</span>
+            <strong id="detail-mood">
+              {% if checkins %}{{ checkins.0.mood_score }}{% else %}-{% endif %}
+            </strong>
+          </div>
+
+          <div class="metric-card">
+            <span>Activity</span>
+            <strong id="detail-activity">
+              {% if checkins %}{{ checkins.0.activity_score }}{% else %}-{% endif %}
+            </strong>
+          </div>
+        </div>
+
+        <div class="notes-box" id="detail-notes">
+          {% if checkins and checkins.0.notes %}
+            {{ checkins.0.notes }}
+          {% elif checkins %}
+            No notes.
+          {% else %}
+            No notes yet.
+          {% endif %}
+        </div>
+      </article>
+
+      <div class="page-action">
+        <a href="{% url 'checkins:checkin_create' %}" class="btn-primary">+ New Check-in</a>
       </div>
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+  {% load static %}
+  <script src="{% static 'checkins/js/history.js' %}?v=4"></script>
 {% endblock %}

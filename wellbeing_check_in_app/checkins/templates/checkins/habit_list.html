@@ -3,32 +3,95 @@
 {% block title %}Habits{% endblock %}
 
 {% block content %}
-<section>
-  <h1>Habits</h1>
-  <p>Manage your wellbeing habits here.</p>
-
-  <p>
-    <a href="{% url 'checkins:habit_create' %}">Create new habit</a>
-  </p>
-
-  {% if habits %}
-    <div class="habit-list">
-      {% for habit in habits %}
-        <article class="habit-card" data-habit-id="{{ habit.habit_id }}">
-          <h2>{{ habit.title }}</h2>
-          <p><strong>Frequency:</strong> {{ habit.get_frequency_type_display }}</p>
-          <p><strong>Created at:</strong> {{ habit.created_at }}</p>
-          <p><strong>Status:</strong> {% if habit.is_active %}Active{% else %}Inactive{% endif %}</p>
-
-          <div class="habit-card__actions">
-            <a href="{% url 'checkins:habit_update' habit.habit_id %}">Edit</a>
-            <a href="{% url 'checkins:habit_delete' habit.habit_id %}">Delete</a>
-          </div>
-        </article>
-      {% endfor %}
+<section class="page-section">
+  <div class="checkin-page-wrapper">
+    <div class="page-heading with-icon">
+      <div class="icon-badge warm">✓</div>
+      <div>
+        <h1>Habits</h1>
+      </div>
     </div>
-  {% else %}
-    <p>No habits yet.</p>
-  {% endif %}
+
+    <div class="wireframe-card tracker-card">
+      <div class="card-body">
+        <div class="tracker-topbar">
+          <div>
+            <h2 class="tracker-title">My Habits</h2>
+            <p class="muted">Create and maintain positive routines in one place.</p>
+          </div>
+
+          <a href="{% url 'checkins:habit_create' %}" class="btn-primary">+ New Habit</a>
+        </div>
+
+        {% if habits %}
+          <div class="tracker-list">
+            {% for habit in habits %}
+              <article class="tracker-item-card">
+                <div class="tracker-item-header">
+                  <div>
+                    <h3 class="tracker-item-title">{{ habit.title }}</h3>
+                    <div class="tracker-badges">
+                      {% if habit.frequency %}
+                        <span class="meta-badge warm-badge">{{ habit.frequency }}</span>
+                      {% endif %}
+
+                      {% if habit.is_active %}
+                        <span class="meta-badge success-badge">Active</span>
+                      {% else %}
+                        <span class="meta-badge muted-badge">Inactive</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="tracker-actions">
+                    <a
+                      href="{% url 'checkins:habit_update' habit.habit_id %}"
+                      class="icon-button-link"
+                      aria-label="Edit habit {{ habit.title }}"
+                      title="Edit habit"
+                    >✎</a>
+
+                    <a
+                      href="{% url 'checkins:habit_delete' habit.habit_id %}"
+                      class="icon-button-link danger"
+                      aria-label="Delete habit {{ habit.title }}"
+                      title="Delete habit"
+                    >🗑</a>
+                  </div>
+                </div>
+
+                <div class="tracker-meta-grid">
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">Frequency</span>
+                    <span class="tracker-meta-value">
+                      {% if habit.frequency %}{{ habit.frequency }}{% else %}Not set{% endif %}
+                    </span>
+                  </div>
+
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">Type</span>
+                    <span class="tracker-meta-value">Wellbeing habit</span>
+                  </div>
+
+                  <div class="tracker-meta-item">
+                    <span class="tracker-meta-label">Status</span>
+                    <span class="tracker-meta-value">
+                      {% if habit.is_active %}Currently active{% else %}Not active{% endif %}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="tracker-empty-state">
+            <h3>No habits yet</h3>
+            <p>Create your first habit to build a more consistent wellbeing routine.</p>
+            <a href="{% url 'checkins:habit_create' %}" class="btn-primary">Create Habit</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}
