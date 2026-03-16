@@ -1,10 +1,11 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 
 from .models import CheckIn
-
+from .models import Goal
+from django.test import TestCase, override_settings
 
 class AuthAccessTests(TestCase):
     def test_checkins_requires_login(self):
@@ -76,9 +77,10 @@ class ApiTests(TestCase):
         self.assertIn("avg_activity", data["summary"])
         self.assertIn("total_checkins", data["summary"])
 
-    def test_progress_invalid_date_returns_400(self):
+    def test_progress_invalid_date_redirects(self):
         resp = self.client.get("/checkins/api/progress/?from=not-a-date")
-        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.status_code, 302)
+        self.assertIsNotNone(resp.get("Location"))
             
 
 class OwnershipTests(TestCase):
@@ -104,3 +106,55 @@ class OwnershipTests(TestCase):
         self.client.login(username="other", password="pass12345")
         resp = self.client.get(f"/checkins/{self.checkin.pk}/delete/")
         self.assertIn(resp.status_code, (403, 404))
+
+
+@override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage")
+class RegisterTests(TestCase):
+    def test_register_page_loads(self):
+        resp = self.client.get("/accounts/register/")
+        self.assertEqual(resp.status_code, 200)
+
+    def test_user_can_register(self):
+        resp = self.client.post("/accounts/register/", {
+            "username": "newuser123",
+            "password1": "StrongPass123",
+            "password2": "StrongPass123",
+        })
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn("/accounts/login/", resp["Location"])
+        self.assertTrue(User.objects.filter(username="newuser123").exists())
+
+
+class GoalHabitAccessTests(TestCase):
+    def test_goal_list_requires_login(self):
+        resp = self.client.get("/checkins/goals/")
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn("/accounts/login/", resp["Location"])
+
+    def test_habit_list_requires_login(self):
+        resp = self.client.get("/checkins/habits/")
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn("/accounts/login/", resp["Location"])
+
+
+@override_settings(STATICFILES_STORAGE="django.contrib.staticfiles.storage.StaticFilesStorage")
+class GoalValidationTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="goaluser", password="pass12345")
+        self.client.login(username="goaluser", password="pass12345")
+    
+    def test_goal_invalid_dates_should_fail(self):
+        today = date.today()
+        yesterday = today - timedelta(days=1)
+
+        resp = self.client.post("/checkins/goals/new/", {
+            "title": "Bad Goal",
+            "target_value": 10,
+            "start_date": today,
+            "end_date": yesterday,
+            "is_active": True,
+        })
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "End date cannot be earlier than start date")
+        self.assertFalse(Goal.objects.filter(title="Bad Goal").exists())
