@@ -76,10 +76,8 @@ class ApiTests(TestCase):
         self.assertIn("avg_activity", data["summary"])
         self.assertIn("total_checkins", data["summary"])
 
-    def test_checkins_invalid_date_returns_400(self):
-        self.client.login(username="u1", password="pass12345")
-
-        resp = self.client.get("/checkins/api/checkins/?from=2026-03-10&to=2026-03-01")
+    def test_progress_invalid_date_returns_400(self):
+        resp = self.client.get("/checkins/api/progress/?from=not-a-date")
         self.assertEqual(resp.status_code, 400)
             
 
