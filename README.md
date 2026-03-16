@@ -59,11 +59,13 @@ http://127.0.0.1:8000/checkins/progress/
 API endpoints:
 
 http://127.0.0.1:8000/checkins/api/progress/
+
 http://127.0.0.1:8000/checkins/api/checkins/
 
 Django admin:
 
 http://127.0.0.1:8000/admin/
+
 Notes
 
 Each team member has their own local development database.
