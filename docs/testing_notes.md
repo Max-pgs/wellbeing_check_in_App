@@ -74,6 +74,7 @@ Pass
 
 **Evidence**
 ![Create checkin](testing_image/checkin_create.png)
+![Create checkin](testing_image/checkin_create_success.png)
 
 
 ### Test:Edit check-in
@@ -101,7 +102,7 @@ The check-in value was successfully deleted.
 **Result**
 Pass
 **Evidence**
-
+![Delete checkin](testing_image/checkin_delete.png)
 
 
 ## 4. Ownership protection
@@ -174,8 +175,7 @@ The form display validation errors and the account was not created.
 Pass
 
 **Evidence**
-![Register validation](testing_image/register_validation1.png)
-![Register validation](testing_image/register_validation2.png)
+![Register validation](testing_image/register_validation.png)
 
 
 ### Test:Check-in form validation
@@ -189,7 +189,123 @@ The system prevented the invalid submission operation and displayed an error mes
 Pass
 
 **Evidence**
-![Checkin validation](testing_image/checkin_validation1.png)
-![Checkin validation](testing_image/checkin_validation2.png)
+![Checkin validation](testing_image/checkin_validation.png)
 
 
+
+## 7. Goal CRUD operations
+### Test:Create goal
+**Expected result**
+A new goal should be created and show in the goal list.
+
+**Actual result**
+The goal was successfully created and displayed in the goal list.
+
+**Result**
+Pass
+
+**Evidence**
+![Creat goal](testing_image/create_goal.png)
+![Creat goal](testing_image/create_goal_page.png)
+
+
+### Test:Edit goal
+**Expected result**
+The updated goal values should be saved successfully.
+
+**Actual result**
+The goal was successfully updated.
+
+**Result**
+Pass
+
+**Evidence**
+![Edit goal](testing_image/edit_goal.png)
+
+
+### Test:Delete goal
+**Expected result**
+The goal should be removed from the list.
+
+**Actual result**
+The goal was successfully deleted.
+
+**Result**
+Pass
+
+**Evidence**
+![Delete goal](testing_image/delete_goal.png)
+
+
+### Test:Goal validation
+**Expected result**
+The system should reject goals with an end date earlier than the start date.
+
+**Actual result**
+The system displayed a validation error and the goal was not created.
+
+**Result**
+Pass
+
+**Evidence**
+![Goal validation](testing_image/goal_validation.png)
+
+
+## 8.Habit CRUD operations
+### Test:Create habit
+**Expected result**
+A new habit should be created and displayed in the list.
+
+**Actual result**
+The habit was successfully created and displayed.
+
+**Result**
+Pass
+
+**Evidence**
+![Create habit](testing_image/create_habit.png)
+
+
+### Test:Edit habit
+**Expected Result**
+A new habit should be created and displayed in the list.
+
+**Actual Result**
+The habit was successfully created and displayed.
+
+**Result**
+Pass
+
+**Evidence**
+![Edit habit](testing_image/edit_habit.png)
+
+
+### Test:Delete habit
+**Expected Result**
+The habit should be removed from the list.
+
+**Actual Result**
+The habit was successfully deleted.
+
+**Result**
+Pass
+
+**Evidence**
+![Delete habit](testing_image/delete_habit.png)
+
+
+## 9.Unit test execution
+**Command**
+python manage.py test checkins -v 2
+
+**Expected Result**
+All unit tests should run successfully without failures.
+
+**Actual Result**
+All unit tests executed successfully and passed.
+
+**Result**
+Pass
+
+**Evidence**
+![Unit tests](testing_image/unit_tests_success.png)
