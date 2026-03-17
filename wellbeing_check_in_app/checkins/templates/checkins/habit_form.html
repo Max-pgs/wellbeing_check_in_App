@@ -7,6 +7,7 @@
 {% block content %}
 <section class="page-section">
   <div class="checkin-page-wrapper">
+    <!-- Habit form header -->
     <div class="page-heading with-icon">
       <div class="icon-badge warm">✓</div>
       <div>
@@ -29,7 +30,7 @@
         <p class="form-intro">
           Add the details for your habit and save it to your wellbeing routine.
         </p>
-
+        <!-- Habit create/update form -->
         <form method="post" novalidate class="checkin-form tracker-form">
           {% csrf_token %}
 
@@ -40,8 +41,9 @@
               {% endfor %}
             </div>
           {% endif %}
-
+          
           {% for field in form %}
+            <!-- Form field block with error handling and support for different input types -->
             <div class="field-block {% if field.field.widget.input_type == 'checkbox' %}field-block-checkbox{% endif %}">
               {% if field.field.widget.input_type == "checkbox" %}
                 <div class="tracker-checkbox-row">
@@ -65,7 +67,7 @@
               {% endif %}
             </div>
           {% endfor %}
-
+          <!-- Form actions for saving or cancelling -->
           <div class="form-actions">
             <button type="submit" class="btn-primary">
               {% if habit %}Save Changes{% else %}Create Habit{% endif %}

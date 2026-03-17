@@ -12,6 +12,7 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <div class="app-shell">
+    <!-- Global site header and primary navigation -->
     <header class="topbar">
       <div class="topbar-inner">
         <a href="{% url 'checkins:dashboard' %}" class="brand" aria-label="Wellbeing Check-ins home">
@@ -74,7 +75,7 @@
           </nav>
         </div>
       </div>
-
+      <!-- Mobile navigation menu toggled with base.js -->
       <div class="mobile-menu" id="mobileMenu">
         <nav class="mobile-menu-links" aria-label="Mobile navigation">
           <a href="{% url 'checkins:dashboard' %}"
@@ -104,7 +105,7 @@
         </nav>
       </div>
     </header>
-
+    <!-- Main page content -->
     <main id="main-content" class="page-container">
       {% if messages %}
         <div class="messages">
@@ -116,7 +117,7 @@
 
       {% block content %}{% endblock %}
     </main>
-
+    <!-- Shared footer navigation -->
     <footer class="site-footer">
       {% include "checkins/partials/footer_nav.html" %}
     </footer>

@@ -1,3 +1,6 @@
+// Load check-in history from the API and power the timeline/slider interface
+// on the history page without requiring a full page reload.
+
 document.addEventListener("DOMContentLoaded", async function () {
   const app = document.getElementById("history-app");
   const slider = document.getElementById("history-slider");
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   let records = [];
   let currentIndex = 0;
 
+  // Format dates for the main detail panel.
   function formatDateLong(value) {
     if (!value) return "Check-in";
     const date = new Date(value);
@@ -37,6 +41,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  // Format dates for compact labels in the timeline UI.
   function formatDateShort(value) {
     if (!value) return "Latest";
     const date = new Date(value);
@@ -49,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  // Disable navigation buttons when the user reaches the start or end of the list.
   function updateNavButtons() {
     if (prevButton) {
       prevButton.disabled = currentIndex <= 0;
@@ -60,6 +66,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  // Render one selected check-in record into the detail panel
+  // and update edit/delete links for that record.
   function showRecord(index) {
     const item = records[index];
     if (!item) return;
@@ -92,6 +100,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     updateNavButtons();
   }
 
+  // Fetch check-in data from the backend API.
   try {
     const response = await fetch(apiUrl, {
       headers: { Accept: "application/json" }
@@ -107,7 +116,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const data = await response.json();
     records = Array.isArray(data.items) ? data.items : [];
-
+    
+    // Handle the empty-state UI when the user has no saved check-ins yet.
     if (records.length === 0) {
       emptyBox.textContent = "No check-ins yet.";
       slider.disabled = true;

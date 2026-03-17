@@ -3,18 +3,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
 from datetime import date, timedelta
 from .models import CheckIn, Goal, Habit
 from .forms import CheckInForm, GoalForm, HabitForm
 
-
+# Display the current user's check-ins.
+# Filtering by request.user ensures each user only sees their own records.
 @login_required
 def checkin_list(request):
     checkins = CheckIn.objects.filter(user=request.user)
     return render(request, "checkins/checkin_list.html", {"checkins": checkins})
 
-
+# Create a new check-in for the authenticated user.
+# The user is assigned in the view so it cannot be forged through the form.
 @login_required
 def checkin_create(request):
     if request.method == "POST":
@@ -29,6 +30,8 @@ def checkin_create(request):
 
     return render(request, "checkins/checkin_form.html", {"form": form})
 
+# Update an existing check-in owned by the current user.
+# get_object_or_404 with user=request.user protects against editing someone else's data.
 @login_required
 def checkin_update(request, pk):
     checkin = get_object_or_404(CheckIn, pk=pk, user=request.user)
@@ -43,6 +46,7 @@ def checkin_update(request, pk):
 
     return render(request, "checkins/checkin_form.html", {"form": form, "is_update": True})
 
+# Delete a check-in only if it belongs to the current user.
 @login_required
 def checkin_delete(request, pk):
     checkin = get_object_or_404(CheckIn, pk=pk, user=request.user)
@@ -53,20 +57,24 @@ def checkin_delete(request, pk):
 
     return render(request, "checkins/checkin_confirm_delete.html", {"checkin": checkin})
 
+# Render the progress page.
+# The page structure loads first and the analytics data is fetched later via JavaScript.
 @login_required
 def progress_view(request):
     return render(request, "checkins/progress.html")
 
+# Render the dashboard page shown after login.
 @login_required
 def dashboard(request):
     return render(request, "checkins/dashboard.html")
 
+# Display only the goals created by the authenticated user.
 @login_required
 def goal_list(request):
     goals = Goal.objects.filter(user=request.user)
     return render(request, "checkins/goal_list.html", {"goals": goals})
 
-
+# Create a new goal for the current user.
 @login_required
 def goal_create(request):
     if request.method == "POST":
@@ -81,7 +89,7 @@ def goal_create(request):
 
     return render(request, "checkins/goal_form.html", {"form": form})
 
-
+# Update a goal only if it belongs to the current user.
 @login_required
 def goal_update(request, goal_id):
     goal = get_object_or_404(Goal, goal_id=goal_id, user=request.user)
@@ -96,7 +104,7 @@ def goal_update(request, goal_id):
 
     return render(request, "checkins/goal_form.html", {"form": form, "goal": goal})
 
-
+# Delete a goal only if it belongs to the current user.
 @login_required
 def goal_delete(request, goal_id):
     goal = get_object_or_404(Goal, goal_id=goal_id, user=request.user)
@@ -107,13 +115,13 @@ def goal_delete(request, goal_id):
 
     return render(request, "checkins/goal_confirm_delete.html", {"goal": goal})
 
-
+# Display only the habits created by the authenticated user.
 @login_required
 def habit_list(request):
     habits = Habit.objects.filter(user=request.user)
     return render(request, "checkins/habit_list.html", {"habits": habits})
 
-
+# Create a new habit for the current user.
 @login_required
 def habit_create(request):
     if request.method == "POST":
@@ -128,7 +136,7 @@ def habit_create(request):
 
     return render(request, "checkins/habit_form.html", {"form": form})
 
-
+# Update a habit only if it belongs to the current user.
 @login_required
 def habit_update(request, habit_id):
     habit = get_object_or_404(Habit, habit_id=habit_id, user=request.user)
@@ -143,7 +151,7 @@ def habit_update(request, habit_id):
 
     return render(request, "checkins/habit_form.html", {"form": form, "habit": habit})
 
-
+# Delete a habit only if it belongs to the current user.
 @login_required
 def habit_delete(request, habit_id):
     habit = get_object_or_404(Habit, habit_id=habit_id, user=request.user)
@@ -157,11 +165,15 @@ def habit_delete(request, habit_id):
 @login_required
 def api_progress(request):
     """
-    Returns progress analytics for the current user over a date range.
-    Query params:
-      - from: YYYY-MM-DD (optional)
-      - to:   YYYY-MM-DD (optional)
-    Defaults to last 30 days inclusive.
+    Return analytics data for the authenticated user within a selected date range.
+
+    Query parameters:
+    - from: DD-MM-YYYY (optional)
+    - to: DD-MM-YYYY (optional)
+
+    If no dates are provided, the API returns data for the last 30 days.
+    The response is used by the progress dashboard to render summary cards,
+    trend charts, and simple achievement messages.
     """
     qs = CheckIn.objects.filter(user=request.user)
 
@@ -187,6 +199,7 @@ def api_progress(request):
             status=400,
         )
 
+    # Restrict analytics to the requested date range for the current user.
     filtered_qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to).order_by("checkin_date")
 
     agg = filtered_qs.aggregate(
@@ -210,6 +223,8 @@ def api_progress(request):
         for checkin in filtered_qs
     ]
 
+    # Generate simple achievement messages based on check-in consistency
+    # and strong average wellbeing scores.
     achievements = []
     count = agg["count"] or 0
 
@@ -247,8 +262,8 @@ def api_checkins(request):
     """
     Returns check-ins for the current user over a date range.
     Query params:
-      - from: YYYY-MM-DD (optional)
-      - to:   YYYY-MM-DD (optional)
+      - from: DD-MM-YYYY (optional)
+      - to:   DD-MM-YYYY (optional)
     Defaults to last 30 days inclusive.
     """
     qs = CheckIn.objects.filter(user=request.user)
@@ -275,8 +290,10 @@ def api_checkins(request):
             status=400,
         )
 
+    # Return only the current user's check-ins within the requested date window
     qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to)
 
+    # Keep the payload simple so the history timeline can render records directly in JavaScript
     data = [
         {
             "id": c.id,
@@ -293,6 +310,7 @@ def api_checkins(request):
         {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
     )
 
+# Register a new user with Django's built-in authentication form
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)

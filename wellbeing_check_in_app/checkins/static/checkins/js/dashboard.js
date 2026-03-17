@@ -1,3 +1,6 @@
+// Populate the dashboard with summary information fetched from the API
+// once the page has finished loading.
+
 document.addEventListener("DOMContentLoaded", async function () {
   const streakEl = document.getElementById("dashboard-streak");
   const weeklyGoalEl = document.getElementById("dashboard-weekly-goal");
@@ -5,11 +8,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   const recentActivityEl = document.getElementById("dashboard-recent-activity");
   const dashboardApp = document.getElementById("dashboard-app");
 
+  // Exit early if the dashboard widgets are not present on the page.
   if (!streakEl || !weeklyGoalEl || !totalCheckinsEl || !recentActivityEl || !dashboardApp) return;
 
   const progressUrl = dashboardApp.dataset.progressUrl;
   const checkinsUrl = dashboardApp.dataset.checkinsUrl;
 
+  // Exit early if the dashboard widgets are not present on the page.
   function formatRelativeLabel(dateString, index) {
     const today = new Date();
     const checkinDate = new Date(dateString);
@@ -27,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     return `Recent item ${index + 1}`;
   }
 
+  // Convert a stored check-in date into a user-friendly relative label.
   function calculateStreak(items) {
     if (!items || items.length === 0) return 0;
 
@@ -58,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     return streak;
   }
 
+  // Count how many check-ins were completed during the last 7 days.
   function calculateWeeklyGoal(items) {
     if (!items || items.length === 0) {
       return { completed: 0, target: 7 };
@@ -78,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   }
 
+  // Show the three most recent activity items in the dashboard.
   function renderRecentActivity(items) {
     if (!items || items.length === 0) {
       recentActivityEl.innerHTML = `
@@ -97,6 +105,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   try {
+    // Load progress summary data and recent check-ins in parallel.
     const [progressResponse, checkinsResponse] = await Promise.all([
       fetch(progressUrl, {
         headers: { Accept: "application/json" }
@@ -121,12 +130,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const weeklyGoal = calculateWeeklyGoal(items);
     const totalCheckins = summary.total_checkins ?? items.length ?? 0;
 
+    // Update the dashboard summary cards with live values.
     streakEl.textContent = streak;
     weeklyGoalEl.textContent = `${weeklyGoal.completed}/${weeklyGoal.target}`;
     totalCheckinsEl.textContent = totalCheckins;
 
     renderRecentActivity(items);
   } catch (error) {
+    // Show a safe fallback message if the dashboard data cannot be loaded.
     recentActivityEl.innerHTML = `<div class="dashboard-empty-state">Error loading dashboard.</div>`;
   }
 });

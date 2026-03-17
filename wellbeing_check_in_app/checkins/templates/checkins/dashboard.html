@@ -7,8 +7,10 @@ Dashboard
 
 {% block content %}
 <section class="page-section">
+  <!-- Dashboard overview with summary cards and recent activity -->
   <div
     class="dashboard-shell"
+    id="dashboard-app"
     data-progress-url="{% url 'checkins:api_progress' %}"
     data-checkins-url="{% url 'checkins:api_checkins' %}"
   >
@@ -58,6 +60,7 @@ Dashboard
 
         <div class="dashboard-recent-card">
           <h3 class="dashboard-section-title">Recent Activity</h3>
+          <!-- Recent activity populated from API data -->
           <div id="dashboard-recent-activity">
             <div class="dashboard-empty-state">Loading...</div>
           </div>

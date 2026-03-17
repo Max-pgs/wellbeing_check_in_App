@@ -1,3 +1,6 @@
+// Fetch progress analytics from the backend API and update
+// the summary cards, achievements list, and Chart.js line chart.
+
 const form = document.getElementById("progress-form");
 const result = document.getElementById("progress-result");
 const summaryStats = document.getElementById("summary-stats");
@@ -7,6 +10,8 @@ const progressBaseUrl = progressApp ? progressApp.dataset.progressUrl : "";
 
 let progressChartInstance = null;
 
+// Remove the existing chart instance before drawing a new one
+// to avoid duplicate canvases and memory leaks.
 function destroyChart() {
   if (progressChartInstance) {
     progressChartInstance.destroy();
@@ -14,6 +19,7 @@ function destroyChart() {
   }
 }
 
+// Render the summary statistic cards.
 function setSummary(summary) {
   summaryStats.innerHTML = `
     <div class="summary-item">
@@ -35,6 +41,7 @@ function setSummary(summary) {
   `;
 }
 
+// Render simple motivational messages returned by the API.
 function setAchievements(achievements) {
   if (!achievements || achievements.length === 0) {
     achievementList.innerHTML = `<li>No achievements yet.</li>`;
@@ -46,6 +53,7 @@ function setAchievements(achievements) {
     .join("");
 }
 
+// Draw the wellbeing trends chart using Chart.js.
 function renderChart(trends) {
   const canvas = document.getElementById("progressChart");
   const ctx = canvas.getContext("2d");
@@ -118,6 +126,7 @@ function renderChart(trends) {
   });
 }
 
+// Show the empty state when no check-ins exist in the selected date range.
 function renderEmpty(data) {
   result.innerHTML = `
     <p>No check-ins found for <strong>${data.from}</strong> to <strong>${data.to}</strong>.</p>
@@ -132,6 +141,7 @@ function renderEmpty(data) {
   destroyChart();
 }
 
+// Render the progress page UI based on the API response data.
 function render(data) {
   if (!data || !data.summary || !Array.isArray(data.trends)) {
     result.innerHTML = "<p>Unexpected response from server.</p>";
@@ -155,6 +165,8 @@ function render(data) {
   renderChart(data.trends);
 }
 
+// Read the selected filters, request fresh analytics data from the API,
+// and refresh the progress page UI.
 async function loadProgress() {
   const from = document.getElementById("from-date").value;
   const to = document.getElementById("to-date").value;

@@ -11,7 +11,7 @@
         <h1>Habits</h1>
       </div>
     </div>
-
+    <!-- Habits management list -->
     <div class="wireframe-card tracker-card">
       <div class="card-body">
         <div class="tracker-topbar">
@@ -24,6 +24,7 @@
         </div>
 
         {% if habits %}
+          <!-- List of user-created habits -->
           <div class="tracker-list">
             {% for habit in habits %}
               <article class="tracker-item-card">
@@ -84,6 +85,7 @@
             {% endfor %}
           </div>
         {% else %}
+          <!-- Empty state for users with no habits yet -->
           <div class="tracker-empty-state">
             <h3>No habits yet</h3>
             <p>Create your first habit to build a more consistent wellbeing routine.</p>

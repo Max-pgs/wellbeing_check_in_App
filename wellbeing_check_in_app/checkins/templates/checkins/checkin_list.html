@@ -10,7 +10,7 @@
       <h1>Check-ins</h1>
     </div>
   </div>
-
+  <!-- History timeline app populated dynamically from the check-ins API -->
   <div
     class="wireframe-card"
     id="history-app"
@@ -20,7 +20,7 @@
   >
     <div class="card-body">
       <h2 class="card-title">Your Check-in History</h2>
-
+      <!-- Slider-based timeline navigation -->
       <div class="timeline-block">
         <div class="timeline-header">
           <div class="timeline-label">Slider Timeline</div>
@@ -49,11 +49,11 @@
           <button type="button" id="history-next" class="timeline-btn">Older →</button>
         </div>
       </div>
-
+      <!-- Empty state shown when the user has no check-ins -->
       <div id="history-empty" class="history-empty {% if checkins %}hidden{% endif %}">
         No check-ins yet. Create your first wellbeing record.
       </div>
-
+      <!-- Detail panel updated when the selected timeline item changes -->
       <article
         id="history-detail"
         class="history-detail-card {% if not checkins %}hidden{% endif %}"

@@ -7,7 +7,7 @@
 {% block content %}
 <section class="page-section">
   <div class="tracker-page-wrapper">
-
+    <!-- Goal form header -->
     <div class="page-heading with-icon">
       <div class="icon-badge warm">🎯</div>
       <div>
@@ -31,7 +31,7 @@
         <p class="form-intro">
           Define a clear target and set the time period for your wellbeing goal.
         </p>
-
+        <!-- Goal create/update form -->
         <form method="post" novalidate class="checkin-form">
           {% csrf_token %}
 
@@ -45,8 +45,8 @@
 
           <div class="field-block">
             <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
-            {{ form.title }}
-            {% if form.title.errors %}
+              {{ form.title }}
+              {% if form.title.errors %}
               <div class="field-error">
                 {% for error in form.title.errors %}
                   <p>{{ error }}</p>
@@ -57,8 +57,8 @@
 
           <div class="field-block field-block-compact">
             <label for="{{ form.target_value.id_for_label }}">{{ form.target_value.label }}</label>
-            {{ form.target_value }}
-            {% if form.target_value.errors %}
+              {{ form.target_value }}
+              {% if form.target_value.errors %}
               <div class="field-error">
                 {% for error in form.target_value.errors %}
                   <p>{{ error }}</p>
@@ -66,12 +66,13 @@
               </div>
             {% endif %}
           </div>
-
+          <!-- Date range fields for the goal period -->
           <div class="tracker-form-grid">
+            <!-- Optional active status toggle -->
             <div class="field-block">
               <label for="{{ form.start_date.id_for_label }}">{{ form.start_date.label }}</label>
-              {{ form.start_date }}
-              {% if form.start_date.errors %}
+                {{ form.start_date }}
+                {% if form.start_date.errors %}
                 <div class="field-error">
                   {% for error in form.start_date.errors %}
                     <p>{{ error }}</p>
@@ -82,8 +83,8 @@
 
             <div class="field-block">
               <label for="{{ form.end_date.id_for_label }}">{{ form.end_date.label }}</label>
-              {{ form.end_date }}
-              {% if form.end_date.errors %}
+                {{ form.end_date }}
+                {% if form.end_date.errors %}
                 <div class="field-error">
                   {% for error in form.end_date.errors %}
                     <p>{{ error }}</p>
