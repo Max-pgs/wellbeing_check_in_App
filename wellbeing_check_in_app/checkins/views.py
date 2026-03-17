@@ -309,7 +309,8 @@ def api_checkins(request):
     return JsonResponse(
         {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
     )
-
+    
+# Custom login view that uses the project’s custom authentication form
 class CustomLoginView(LoginView):
     template_name = "registration/login.html"
     authentication_form = CustomLoginForm

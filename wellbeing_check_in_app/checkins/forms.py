@@ -2,12 +2,8 @@ from django import forms
 from .models import CheckIn, Goal, Habit
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-# Forms used to create and update the main user data in the application.
-# ModelForm keeps validation rules aligned with the database models.
-
 # Form for creating and editing daily wellbeing check-ins.
 # Custom widgets are used to improve usability, especially the score sliders.
-
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
