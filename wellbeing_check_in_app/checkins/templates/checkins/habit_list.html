@@ -20,7 +20,7 @@
             <p class="muted">Create and maintain positive routines in one place.</p>
           </div>
 
-          <a href="{% url 'checkins:habit_create' %}" class="btn-primary">+ New Habit</a>
+          <a href="{% url 'checkins:habit_create' %}" class="btn-primary">New Habit</a>
         </div>
 
         {% if habits %}
@@ -50,14 +50,14 @@
                       class="icon-button-link"
                       aria-label="Edit habit {{ habit.title }}"
                       title="Edit habit"
-                    >✎</a>
+                    >✎ Edit</a>
 
                     <a
                       href="{% url 'checkins:habit_delete' habit.habit_id %}"
                       class="icon-button-link danger"
                       aria-label="Delete habit {{ habit.title }}"
                       title="Delete habit"
-                    >🗑</a>
+                    >🗑 Delete</a>
                   </div>
                 </div>
 
