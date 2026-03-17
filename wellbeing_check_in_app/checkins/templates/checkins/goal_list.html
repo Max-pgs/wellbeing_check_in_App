@@ -20,7 +20,7 @@
             <p class="muted">Create and manage personal wellbeing goals in one place.</p>
           </div>
 
-          <a href="{% url 'checkins:goal_create' %}" class="btn-primary">+ New Goal</a>
+          <a href="{% url 'checkins:goal_create' %}" class="btn-primary">New Goal</a>
         </div>
 
         {% if goals %}
@@ -48,14 +48,14 @@
                       class="icon-button-link"
                       aria-label="Edit goal {{ goal.title }}"
                       title="Edit goal"
-                    >✎</a>
+                    >✎ Edit</a>
 
                     <a
                       href="{% url 'checkins:goal_delete' goal.goal_id %}"
                       class="icon-button-link danger"
                       aria-label="Delete goal {{ goal.title }}"
                       title="Delete goal"
-                    >🗑</a>
+                    >🗑 Delete</a>
                   </div>
                 </div>
 
