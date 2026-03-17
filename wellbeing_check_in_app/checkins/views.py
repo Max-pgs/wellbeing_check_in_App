@@ -19,14 +19,14 @@ def checkin_list(request):
 @login_required
 def checkin_create(request):
     if request.method == "POST":
-        form = CheckInForm(request.POST)
+        form = CheckInForm(request.POST, user=request.user)
         if form.is_valid():
             checkin = form.save(commit=False)
             checkin.user = request.user
             checkin.save()
             return redirect("checkins:checkin_list")
     else:
-        form = CheckInForm()
+        form = CheckInForm(user=request.user)
 
     return render(request, "checkins/checkin_form.html", {"form": form})
 
@@ -37,12 +37,12 @@ def checkin_update(request, pk):
     checkin = get_object_or_404(CheckIn, pk=pk, user=request.user)
 
     if request.method == "POST":
-        form = CheckInForm(request.POST, instance=checkin)
+        form = CheckInForm(request.POST, instance=checkin, user=request.user)
         if form.is_valid():
             form.save()
             return redirect("checkins:checkin_list")
     else:
-        form = CheckInForm(instance=checkin)
+        form = CheckInForm(instance=checkin, user=request.user)
 
     return render(request, "checkins/checkin_form.html", {"form": form, "is_update": True})
 
@@ -61,7 +61,15 @@ def checkin_delete(request, pk):
 # The page structure loads first and the analytics data is fetched later via JavaScript.
 @login_required
 def progress_view(request):
-    return render(request, "checkins/progress.html")
+    today = date.today()
+    return render(
+        request,
+        "checkins/progress.html",
+        {
+            "today": today,
+            "default_from": today - timedelta(days=29),
+        },
+    )
 
 # Render the dashboard page shown after login.
 @login_required
@@ -198,6 +206,18 @@ def api_progress(request):
             {"error": "'from' date cannot be after 'to' date."},
             status=400,
         )
+    
+    if date_from > today or date_to > today:
+        return JsonResponse(
+            {"error": "Future dates are not allowed."},
+            status=400,
+        )
+
+    if (date_to - date_from).days > 29:
+        return JsonResponse(
+            {"error": "Please select a date range of 30 days or less."},
+            status=400,
+        )
 
     # Restrict analytics to the requested date range for the current user.
     filtered_qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to).order_by("checkin_date")
@@ -262,12 +282,10 @@ def api_checkins(request):
     """
     Returns check-ins for the current user over a date range.
     Query params:
-      - from: DD-MM-YYYY (optional)
-      - to:   DD-MM-YYYY (optional)
+      - from: YYYY-MM-DD (optional)
+      - to:   YYYY-MM-DD (optional)
     Defaults to last 30 days inclusive.
     """
-    qs = CheckIn.objects.filter(user=request.user)
-
     today = date.today()
     default_from = today - timedelta(days=29)
     default_to = today
@@ -290,8 +308,23 @@ def api_checkins(request):
             status=400,
         )
 
+    if date_from > today or date_to > today:
+        return JsonResponse(
+            {"error": "Future dates are not allowed."},
+            status=400,
+        )
+
     # Return only the current user's check-ins within the requested date window
-    qs = qs.filter(checkin_date__gte=date_from, checkin_date__lte=date_to)
+    # and keep them ordered from oldest to newest for the history slider.
+    qs = (
+        CheckIn.objects
+        .filter(
+            user=request.user,
+            checkin_date__gte=date_from,
+            checkin_date__lte=date_to,
+        )
+        .order_by("checkin_date", "id")
+    )
 
     # Keep the payload simple so the history timeline can render records directly in JavaScript
     data = [
@@ -307,7 +340,12 @@ def api_checkins(request):
     ]
 
     return JsonResponse(
-        {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
+        {
+            "from": date_from.isoformat(),
+            "to": date_to.isoformat(),
+            "count": len(data),
+            "items": data,
+        }
     )
     
 # Custom login view that uses the project’s custom authentication form

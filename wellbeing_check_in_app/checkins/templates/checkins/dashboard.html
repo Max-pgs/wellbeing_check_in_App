@@ -10,9 +10,6 @@ Dashboard
   <!-- Dashboard overview with summary cards and recent activity -->
   <div
     class="dashboard-shell"
-    id="dashboard-app"
-    data-progress-url="{% url 'checkins:api_progress' %}"
-    data-checkins-url="{% url 'checkins:api_checkins' %}"
   >
     <div class="page-heading with-icon">
       <div class="icon-badge warm">🏠</div>
@@ -35,6 +32,7 @@ Dashboard
         <div class="dashboard-topbar">
           <div>
             <h2 class="dashboard-title">My Dashboard</h2>
+            <p class="dashboard-subtitle">Summary based on your last 30 days of check-ins.</p>
           </div>
         </div>
 

@@ -19,6 +19,13 @@ function destroyChart() {
   }
 }
 
+function daysBetween(from, to) {
+  const fromDate = new Date(`${from}T00:00:00`);
+  const toDate = new Date(`${to}T00:00:00`);
+  const diffMs = toDate - fromDate;
+  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+}
+
 // Render the summary statistic cards.
 function setSummary(summary) {
   summaryStats.innerHTML = `
@@ -53,6 +60,17 @@ function setAchievements(achievements) {
     .join("");
 }
 
+// Format a YYYY-MM-DD string into a locale-aware short date (e.g. "Feb 20").
+function formatChartDate(value) {
+  if (!value) return "";
+  const [year, month, day] = value.split("-");
+  const safeDate = new Date(Number(year), Number(month) - 1, Number(day));
+  return safeDate.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+}
+
 // Draw the wellbeing trends chart using Chart.js.
 function renderChart(trends) {
   const canvas = document.getElementById("progressChart");
@@ -67,10 +85,7 @@ function renderChart(trends) {
   progressChartInstance = new Chart(ctx, {
     type: "line",
     data: {
-      labels: trends.map((item) => {
-        const d = new Date(item.label);
-        return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-      }),
+      labels: trends.map((item) => formatChartDate(item.label)),
       datasets: [
         {
           label: "Energy",
@@ -156,7 +171,7 @@ function render(data) {
 
   result.innerHTML = `
     <p>
-      Showing progress for <strong>${data.from}</strong> to <strong>${data.to}</strong>.
+      Showing progress from <strong>${data.from}</strong> to <strong>${data.to}</strong>.
     </p>
   `;
 
@@ -174,6 +189,12 @@ async function loadProgress() {
 
   if (from && to && from > to) {
     result.innerHTML = "<p>From date cannot be after To date.</p>";
+    return;
+  }
+
+  if (from && to && daysBetween(from, to) > 29) {
+    result.innerHTML = "<p>Please select a date range of 30 days or less.</p>";
+    destroyChart();
     return;
   }
 
@@ -209,11 +230,13 @@ async function loadProgress() {
   }
 }
 
+// When the form is submitted, prevent normal page reload and refresh the progress data.
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   await loadProgress();
 });
 
+// On initial page load, fetch and display progress data immediately.
 window.addEventListener("DOMContentLoaded", async () => {
   await loadProgress();
 });

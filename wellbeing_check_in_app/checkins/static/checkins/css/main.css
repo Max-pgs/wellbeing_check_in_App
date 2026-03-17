@@ -948,6 +948,34 @@ input[type="date"] {
   font-size: 0.95rem;
 }
 
+.timeline-jump {
+  margin-bottom: 16px;
+}
+
+.timeline-jump label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.timeline-jump select {
+  width: 100%;
+  max-width: 320px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+}
+
+.timeline-jump select:focus-visible {
+  outline: 3px solid var(--warm);
+  outline-offset: 3px;
+}
+
 .timeline-btn {
   padding: 4px 0;
   border: none;
@@ -1725,11 +1753,6 @@ input[type="date"] {
     height: 320px;
   }
 
-  .footer-main-nav,
-  .site-footer .user-nav {
-    display: none;
-  }
-
   .site-footer .footer-inner {
     justify-content: flex-start;
   }
@@ -1891,9 +1914,5 @@ input[type="date"] {
 
   .mobile-menu {
     width: min(220px, calc(100vw - 32px));
-  }
-
-  .username {
-    display: none;
   }
 }

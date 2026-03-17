@@ -20,6 +20,12 @@
   >
     <div class="card-body">
       <h2 class="card-title">Your Check-in History</h2>
+      <div class="timeline-jump">
+        <label for="history-date-select">Jump to a check-in date</label>
+        <select id="history-date-select">
+          <option value="">Select a date</option>
+        </select>
+      </div>
       <!-- Slider-based timeline navigation -->
       <div class="timeline-block">
         <div class="timeline-header">
@@ -45,8 +51,8 @@
         >
 
         <div class="timeline-nav">
-          <button type="button" id="history-prev" class="timeline-btn">← Newer</button>
-          <button type="button" id="history-next" class="timeline-btn">Older →</button>
+          <button type="button" id="history-prev" class="timeline-btn">← Previous</button>
+          <button type="button" id="history-next" class="timeline-btn">Next →</button>
         </div>
       </div>
       <!-- Empty state shown when the user has no check-ins -->
@@ -142,5 +148,5 @@
 
 {% block scripts %}
   {% load static %}
-  <script src="{% static 'checkins/js/history.js' %}?v=4"></script>
+  <script src="{% static 'checkins/js/history.js' %}?v=6"></script>
 {% endblock %}
