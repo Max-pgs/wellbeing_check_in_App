@@ -11,30 +11,40 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
+            "placeholder": "Enter your username",
             "autocomplete": "username",
             "autofocus": True
         })
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
+            "placeholder": "Enter your password",
             "autocomplete": "current-password"
         })
     )
     
 class CustomRegisterForm(UserCreationForm):
     username = forms.CharField(
+        help_text="150 characters or fewer. Letters, digits and @/./+/-/_ only.",
         widget=forms.TextInput(attrs={
+            "placeholder": "Enter your username",
             "autocomplete": "username",
             "autofocus": True
         })
     )
+
     password1 = forms.CharField(
+        help_text=UserCreationForm.base_fields['password1'].help_text,
         widget=forms.PasswordInput(attrs={
+            "placeholder": "Enter your password",
             "autocomplete": "new-password"
         })
     )
+
     password2 = forms.CharField(
+        help_text="Enter the same password as before, for verification.",
         widget=forms.PasswordInput(attrs={
+            "placeholder": "Re-enter your password",
             "autocomplete": "new-password"
         })
     )
