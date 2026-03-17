@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count
-from django.contrib.auth.forms import UserCreationForm
 from datetime import date, timedelta
 from .models import CheckIn, Goal, Habit
-from .forms import CheckInForm, GoalForm, HabitForm
+from .forms import CheckInForm, GoalForm, HabitForm, CustomRegisterForm, CustomLoginForm
 
 # Display the current user's check-ins.
 # Filtering by request.user ensures each user only sees their own records.
@@ -309,15 +309,21 @@ def api_checkins(request):
     return JsonResponse(
         {"from": date_from.isoformat(), "to": date_to.isoformat(), "count": len(data), "items": data}
     )
+    
+# Custom login view that uses the project’s custom authentication form
+class CustomLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = CustomLoginForm
 
 # Register a new user with Django's built-in authentication form
+# Register a new user with the customised registration form.
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("login")
     else:
-        form = UserCreationForm()
-    return render(request, "registration/register.html",{"form":form})
+        form = CustomRegisterForm()
 
+    return render(request, "registration/register.html", {"form": form})
