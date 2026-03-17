@@ -1,9 +1,10 @@
 from django import forms
 from .models import CheckIn, Goal, Habit
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from datetime import date
 
-# Form for creating and editing daily wellbeing check-ins.
-# Custom widgets are used to improve usability, especially the score sliders.
+# Custom login view that uses the project's custom authentication form
+# and renders the login template with email/password fields.
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -18,7 +19,10 @@ class CustomLoginForm(AuthenticationForm):
             "autocomplete": "current-password"
         })
     )
-    
+
+# Custom registration form extending Django's UserCreationForm.
+# Adds custom placeholders and help text for username and password fields.
+# Validates password strength and ensures password confirmation matches.
 class CustomRegisterForm(UserCreationForm):
     username = forms.CharField(
         help_text="150 characters or fewer. Letters, digits and @/./+/-/_ only.",
@@ -44,7 +48,11 @@ class CustomRegisterForm(UserCreationForm):
             "autocomplete": "new-password"
         })
     )
-    
+
+# Form for creating and updating daily wellbeing check-ins.
+# Uses HTML5 range sliders for energy, mood, and activity scores (0-10 scale).
+# Includes date validation to prevent check-ins from future dates.
+# User assignment is handled in the view to prevent data forgery.
 class CheckInForm(forms.ModelForm):
     class Meta:
         model = CheckIn
@@ -97,6 +105,16 @@ class CheckInForm(forms.ModelForm):
                 }
             ),
         }
+        
+    def clean_checkin_date(self):
+        checkin_date = self.cleaned_data.get("checkin_date")
+
+        if checkin_date and checkin_date > date.today():
+            raise forms.ValidationError(
+                "Check-ins cannot be created for future dates."
+            )
+
+        return checkin_date
 
 # Form for creating and editing goals.
 # Includes additional validation to ensure the date range is logical.
@@ -150,7 +168,5 @@ class HabitForm(forms.ModelForm):
             ),
             "target_value": forms.NumberInput(
                 attrs={"placeholder": "e.g. 30"}
-            ),
-            "start_date": forms.DateInput(attrs={"type": "date"}),
-            "end_date": forms.DateInput(attrs={"type": "date"}),
+            )
         }
