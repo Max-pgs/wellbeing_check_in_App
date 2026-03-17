@@ -10,12 +10,12 @@
     <h1>Progress</h1>
   </div>
 </section>
-
+<!-- Progress analytics app powered by the progress API -->
 <div class="progress-layout" id="progress-app" data-progress-url="{% url 'checkins:api_progress' %}">
   <section class="wireframe-card large-chart-card">
     <div class="card-body">
       <h2 class="card-title">Trends</h2>
-
+      <!-- Date range filters for analytics -->
       <form id="progress-form" class="progress-form">
         <div class="field-inline">
           <label for="from-date">From</label>
@@ -31,7 +31,7 @@
           Update Statistics
         </button>
       </form>
-
+      <!-- Dynamic summary area updated by progress.js -->
       <section
         id="progress-result"
         class="progress-result"
@@ -39,7 +39,7 @@
       >
         <p class="result-placeholder">Select a date range to view your trends.</p>
       </section>
-
+      <!-- Chart.js canvas for wellbeing trends -->
       <div class="chart-wrap">
         <canvas id="progressChart"></canvas>
       </div>
@@ -47,6 +47,7 @@
   </section>
 
   <aside class="stats-panel">
+    <!-- Summary statistics card -->
     <section class="stats-card">
       <h3>Summary Statistics</h3>
       <div id="summary-stats">
@@ -68,7 +69,7 @@
         </div>
       </div>
     </section>
-
+    <!-- Achievement messages returned by the backend -->
     <section class="achievements-card">
       <h3>Achievements</h3>
       <ul id="achievement-list">

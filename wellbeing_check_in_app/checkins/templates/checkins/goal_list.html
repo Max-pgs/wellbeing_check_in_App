@@ -11,7 +11,7 @@
         <h1>Goals</h1>
       </div>
     </div>
-
+    <!-- Goals management list -->
     <div class="wireframe-card tracker-card">
       <div class="card-body">
         <div class="tracker-topbar">
@@ -24,6 +24,7 @@
         </div>
 
         {% if goals %}
+          <!-- List of user-created goals -->
           <div class="tracker-list">
             {% for goal in goals %}
               <article class="tracker-item-card" data-goal-id="{{ goal.goal_id }}">
@@ -80,6 +81,7 @@
             {% endfor %}
           </div>
         {% else %}
+          <!-- Empty state shown when no goals exist yet -->
           <div class="tracker-empty-state">
             <h3>No goals yet</h3>
             <p>Create your first wellbeing goal to start tracking progress.</p>
