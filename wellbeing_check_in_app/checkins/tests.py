@@ -1,3 +1,7 @@
+# Test suite for the wellbeing check-in application.
+# These tests cover authentication, CRUD functionality,
+# ownership protection, API behaviour, and basic frontend rendering.
+
 from datetime import date, timedelta
 
 from django.contrib.auth.models import User
@@ -78,9 +82,9 @@ class BaseTestMixin:
 
     def assert_redirects_to_login(self, response):
         self.assertEqual(response.status_code, 302)
-        self.assertIn("/accounts/login/", response["Location"])
+        self.assertTrue(response["Location"].startswith("/accounts/login/"))
 
-
+# Tests for authentication and access protection.
 @TEST_STATICFILES
 class AuthAccessTests(BaseTestMixin, TestCase):
     def test_checkins_requires_login(self):
@@ -108,7 +112,7 @@ class AuthAccessTests(BaseTestMixin, TestCase):
         logged_in = self.client.login(username="testuser", password="pass12345")
         self.assertTrue(logged_in)
 
-
+# Tests for the user registration flow.
 @TEST_STATICFILES
 class RegisterTests(BaseTestMixin, TestCase):
     def test_register_page_loads(self):
@@ -125,10 +129,10 @@ class RegisterTests(BaseTestMixin, TestCase):
             },
         )
         self.assertEqual(resp.status_code, 302)
-        self.assertIn("/accounts/login/", resp["Location"])
+        self.assertTrue(resp["Location"].startswith("/accounts/login/"))
         self.assertTrue(User.objects.filter(username="newuser123").exists())
 
-
+# Tests for the user registration flow.
 @TEST_STATICFILES
 class CheckInCrudTests(BaseTestMixin, TestCase):
     def setUp(self):
@@ -203,7 +207,7 @@ class CheckInCrudTests(BaseTestMixin, TestCase):
         self.assertIn("my checkin", content)
         self.assertNotIn("other checkin", content)
 
-
+# Tests ensuring users cannot access or modify data belonging to other users.
 @TEST_STATICFILES
 class OwnershipTests(BaseTestMixin, TestCase):
     def setUp(self):
@@ -240,7 +244,7 @@ class OwnershipTests(BaseTestMixin, TestCase):
         resp = self.client.get(f"/checkins/habits/{self.habit.pk}/delete/")
         self.assertIn(resp.status_code, [302, 403, 404])
 
-
+# Tests for goal and habit CRUD operations and validation rules.
 @TEST_STATICFILES
 class GoalHabitCrudAndValidationTests(BaseTestMixin, TestCase):
     def setUp(self):
@@ -355,7 +359,7 @@ class GoalHabitCrudAndValidationTests(BaseTestMixin, TestCase):
         self.assertEqual(Habit.objects.count(), before_count - 1)
         self.assertFalse(Habit.objects.filter(pk=habit.pk).exists())
 
-
+# Tests for goal and habit CRUD operations and validation rules.
 @TEST_STATICFILES
 class ApiTests(BaseTestMixin, TestCase):
     def setUp(self):
@@ -409,7 +413,7 @@ class ApiTests(BaseTestMixin, TestCase):
 
         resp = self.client.get("/checkins/api/checkins/?from=not-a-date")
         self.assertNotEqual(resp.status_code, 500)
-        self.assertIn(resp.status_code, [200, 302, 400])
+        self.assertIn(resp.status_code, [400, 302])
 
     def test_progress_api_requires_login(self):
         resp = self.client.get("/checkins/api/progress/")
@@ -447,10 +451,9 @@ class ApiTests(BaseTestMixin, TestCase):
         self.login(username="apiuser", password="pass12345")
 
         resp = self.client.get("/checkins/api/progress/?from=not-a-date")
-        self.assertNotEqual(resp.status_code, 500)
-        self.assertIn(resp.status_code, [302, 400])
+        self.assertEqual(resp.status_code, 400)
 
-
+# Basic frontend rendering tests to ensure key UI pages load correctly.
 @TEST_STATICFILES
 class FrontendRenderTests(BaseTestMixin, TestCase):
     def setUp(self):
