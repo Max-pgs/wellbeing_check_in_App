@@ -6,31 +6,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Wellbeing Check-ins{% endblock %}</title>
   <link rel="icon" type="image/x-icon" href="{% static 'checkins/images/favicon.ico' %}">
-  <link rel="stylesheet" href="{% static 'checkins/css/main.css' %}?v=1000">
+  <link rel="stylesheet" href="{% static 'checkins/css/main.css' %}?v=1001">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
   <div class="app-shell">
     <!-- Global site header and primary navigation -->
-    <header class="topbar">
-      {% include "checkins/partials/header_nav.html" %}
-    </header>
-    <!-- Main page content -->
-    <main id="main-content" class="page-container">
-      {% if messages %}
-        <div class="messages">
-          {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
+    {% with current_url=request.resolver_match.url_name %}
+      <header class="topbar">
+        {% if current_url == "login" or current_url == "register" %}
+          {% include "checkins/partials/header_nav.html" with is_auth_page=True %}
+        {% else %}
+          {% include "checkins/partials/header_nav.html" with is_auth_page=False %}
+        {% endif %}
+      </header>
 
-      {% block content %}{% endblock %}
-    </main>
-    <!-- Shared footer navigation -->
-    <footer class="site-footer">
-      {% include "checkins/partials/footer_nav.html" %}
-    </footer>
+      <!-- Main page content -->
+      <main id="main-content" class="page-container">
+        {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+      </main>
+
+      <!-- Shared footer navigation -->
+      <footer class="site-footer">
+        {% if current_url == "login" or current_url == "register" %}
+          {% include "checkins/partials/footer_nav.html" with is_auth_page=True %}
+        {% else %}
+          {% include "checkins/partials/footer_nav.html" with is_auth_page=False %}
+        {% endif %}
+      </footer>
+    {% endwith %}
   </div>
   <script src="{% static 'checkins/js/base.js' %}"></script>
   {% block scripts %}{% endblock %}

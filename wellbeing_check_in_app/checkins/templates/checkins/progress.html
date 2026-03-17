@@ -19,12 +19,12 @@
       <form id="progress-form" class="progress-form">
         <div class="field-inline">
           <label for="from-date">From</label>
-          <input id="from-date" name="from" type="date" />
+          <input id="from-date" name="from" type="date" max="{{ today|date:'Y-m-d' }}" value="{{ default_from|date:'Y-m-d' }}" />
         </div>
 
         <div class="field-inline">
           <label for="to-date">To</label>
-          <input id="to-date" name="to" type="date" />
+          <input id="to-date" name="to" type="date" max="{{ today|date:'Y-m-d' }}" value="{{ today|date:'Y-m-d' }}" />
         </div>
 
         <button type="submit" id="calcBtn" class="btn-primary">
