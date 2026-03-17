@@ -897,10 +897,9 @@ input[type="date"] {
   background: transparent;
 }
 
-.history-slider:focus,
-.history-slider:active {
-  outline: none;
-  box-shadow: none;
+.history-slider:focus-visible {
+  outline: 3px solid var(--warm);
+  outline-offset: 4px;
 }
 
 .history-slider::-webkit-slider-runnable-track {
