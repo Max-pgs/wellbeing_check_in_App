@@ -1,11 +1,13 @@
 Deployment
 
 Deployed application:
+
 https://wellbeing-check-in-app.onrender.com
 
 Repository
 
 Source code:
+
 https://github.com/Max-pgs/wellbeing_check_in_App
 
 Local Setup
@@ -13,21 +15,29 @@ Local Setup
 After cloning the repository, install dependencies and apply migrations:
 
 pip install -r requirements.txt
+
 python manage.py migrate
+
 python manage.py createsuperuser
+
 python manage.py runserver
+
 Steps
 
 pip install -r requirements.txt
+
 Installs the required Python packages for the project.
 
 python manage.py migrate
+
 Creates the local database and applies all migrations.
 
 python manage.py createsuperuser
+
 Creates an administrator account for logging into the application and Django admin.
 
 python manage.py runserver
+
 Starts the local development server.
 
 Access the application
